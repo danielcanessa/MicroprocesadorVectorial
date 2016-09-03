@@ -26,17 +26,25 @@ public class Ensamblador {
      */
     public static void main(String[] args) throws FileNotFoundException, IOException {
        ArrayList<String> instructions = new ArrayList<String>();
+       ArrayList<String> instructionsCorrected = new ArrayList<String>();
         Ensamblador ensamblador = new Ensamblador();
         instructions = ensamblador.readFile();
         PrintWriter file = new PrintWriter("binary.txt", "UTF-8");
 
-
-
-        ensamblador.ensamblador(instructions, file);
+        RiskDetection riskDetection = new RiskDetection();
+        instructionsCorrected = riskDetection.principal(instructions);
+        //ensamblador.printInstructions(instructionsCorrected);
+        ensamblador.ensamblador(instructionsCorrected, file);
         file.close();
-     //   System.out.println(getBinary(5));
-      
     }
+    
+    
+    public void printInstructions(ArrayList<String> instructions){
+        System.out.println("------- Instructions printed -------");
+        for(int i = 0; i<instructions.size(); i++)
+            System.out.println(instructions.get(i));
+    }
+    
     
     public String getmNemonic(String mNemonic)
     {
@@ -80,7 +88,7 @@ public class Ensamblador {
         {
             return("01010");            
         }
-        else if(mNemonic.contains("stall")) //tofix
+        else if(mNemonic.contains("nop")) //tofix
         {
             return("00000");            
         }
@@ -123,161 +131,161 @@ public class Ensamblador {
     }
     public  String getRegister(String register)
     {
-        if (register.contains("r1")) {
+        if (register.contains("r0")) {
             return("00000");
             
         }
-        else if(register.contains("r2"))
+        else if(register.contains("r1"))
         {
             return("00001");
             
         }
-        else if(register.contains("r3"))
+        else if(register.contains("r2"))
         {
             return("00010");
             
         }
-        else if(register.contains("r4"))
+        else if(register.contains("r3"))
         {
             return("00011");
             
         }
-        else if(register.contains("r5"))
+        else if(register.contains("r4"))
         {
             return("00100");
             
         }
-        else if(register.contains("r6"))
+        else if(register.contains("r5"))
         {
             return("00101");
             
         }
-        else if(register.contains("r7"))
+        else if(register.contains("r6"))
         {
             return("00110");
             
         }
-        else if(register.contains("r8"))
+        else if(register.contains("r7"))
         {
             return("00111");
             
         }
-        else if(register.contains("r9"))
+        else if(register.contains("r8"))
         {
             return("01000");
             
         }
-        else if(register.contains("r10"))
+        else if(register.contains("r9"))
         {
             return("01001");
             
         }
-        else if(register.contains("r11"))
+        else if(register.contains("r10"))
         {
             return("01010");
             
         }
-        else if(register.contains("r12"))
+        else if(register.contains("r11"))
         {
             return("01011");
             
         }
-        else if(register.contains("r13"))
+        else if(register.contains("r12"))
         {
             return("01100");
             
         }
-        else if(register.contains("r14"))
+        else if(register.contains("r13"))
         {
             return("01101");
             
         }
-        else if(register.contains("r15"))
+        else if(register.contains("r14"))
         {
             return("01110");
             
         }
-        else if(register.contains("r16"))
+        else if(register.contains("r15"))
         {
             return("01111");
             
         }
-        else if(register.contains("r17"))
+        else if(register.contains("r16"))
         {
             return("10000");
             
         }
-        else if(register.contains("r18"))
+        else if(register.contains("r17"))
         {
             return("10001");
             
         }
-        else if(register.contains("r19"))
+        else if(register.contains("r18"))
         {
             return("10010");
             
         }
-        else if(register.contains("r20"))
+        else if(register.contains("r19"))
         {
             return("10011");
             
         }
-        else if(register.contains("r21"))
+        else if(register.contains("r20"))
         {
             return("10100");
             
         }
-        else if(register.contains("r22"))
+        else if(register.contains("r21"))
         {
             return("10101");
             
         }
-        else if(register.contains("r23"))
+        else if(register.contains("r22"))
         {
             
             return("10110");
         }
-        else if(register.contains("r24"))
+        else if(register.contains("r23"))
         {
             return("10111");
             
         }
-        else if(register.contains("r25"))
+        else if(register.contains("r24"))
         {
             return("11000");
             
         }
-        else if(register.contains("r26"))
+        else if(register.contains("r25"))
         {
             return("11001");
             
         }
-        else if(register.contains("r27"))
+        else if(register.contains("r26"))
         {
             return("11010");
             
         }
-        else if(register.contains("r28"))
+        else if(register.contains("r27"))
         {
             return("11011");
             
         }
-        else if(register.contains("r29"))
+        else if(register.contains("r28"))
         {
             return("11100");
             
         }
-        else if(register.contains("r30"))
+        else if(register.contains("r29"))
         {
             return("11101");
             
         }
-        else if(register.contains("r31"))
+        else if(register.contains("r30"))
         {
             return("11110");
             
         }
-        else if(register.contains("r32"))
+        else if(register.contains("r31"))
         {
             return("11111");
             
@@ -363,10 +371,10 @@ public class Ensamblador {
                         rt = parts[2].replace(",", "");
                         imm = parts[3].replace("#", "");
                         
-                        file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)
+                        file.println(getmNemonic(mnemonic)+getRegister(rt)+getRegister(rs)
                                 +getBinary(Integer.parseInt((imm))));
                         
-                        System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)
+                        System.out.println(getmNemonic(mnemonic)+getRegister(rt)+getRegister(rs)
                                 +getBinary(Integer.parseInt((imm))));
                         
                        // getRegister(rt);
@@ -387,12 +395,12 @@ public class Ensamblador {
                     break;
                 case "mov"://Type I
                 case "mov.d":
-                    rs = parts[1].replace(",", "");
+                    rt = parts[1].replace(",", "");
                     imm = parts[2].replace("#", "");
                     
-                    file.println(getmNemonic(mnemonic)+getRegister(rs)+"00000"
+                    file.println(getmNemonic(mnemonic)+ "00000" + getRegister(rt)
                                 +getBinary(Integer.parseInt((imm))));
-                    System.out.println(getmNemonic(mnemonic)+getRegister(rs)+"00000"
+                    System.out.println(getmNemonic(mnemonic)+ "00000" + getRegister(rt)
                                 +getBinary(Integer.parseInt((imm))));
                     break;
                 case "ror.d"://Type I
@@ -402,18 +410,18 @@ public class Ensamblador {
                     rs = parts[1].replace(",", "");
                     rt = parts[2].replace(",", "");
                     shamt = parts[3].replace("#", "");                    
-                    file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
+                    file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"//XXXXXXXXXXXXXXXXXXXXXXXXXXXx posible error con los registros
                                 +getBinaryShamt(Integer.parseInt((shamt))));
                     System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
                                 +getBinaryShamt(Integer.parseInt((shamt))));
                     break;
                 case "cmp"://Type I
-                    rs = parts[1].replace(",", "");
+                    rt = parts[1].replace(",", "");
                     imm = parts[2].replace("#", "");
                     
-                    file.println(getmNemonic(mnemonic)+getRegister(rs)+"00000"
+                    file.println(getmNemonic(mnemonic)+"00000"+getRegister(rt)
                                 +getBinary(Integer.parseInt((imm))));
-                    System.out.println(getmNemonic(mnemonic)+getRegister(rs)+"00000"
+                    System.out.println(getmNemonic(mnemonic)+"00000"+getRegister(rt)
                                 +getBinary(Integer.parseInt((imm))));
                     break;
                 case "beq"://Type B
@@ -433,7 +441,7 @@ public class Ensamblador {
                     System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
                                 +"000000000000");
                     break;
-                case "stall":
+                case "nop":
                     file.println("00000000000000000000000000000000");
                     System.out.println("00000000000000000000000000000000");
                 default: 
@@ -458,7 +466,10 @@ public class Ensamblador {
                 new InputStreamReader(new FileInputStream(file), "UTF8"));
 
         while ((line = in.readLine()) != null) {
-            instructions.add(line);
+            
+            if(line.length() > 1){
+                instructions.add(line);
+            }
         }
         in.close();
         return instructions;
