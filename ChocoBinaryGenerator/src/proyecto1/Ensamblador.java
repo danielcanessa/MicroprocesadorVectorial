@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -24,20 +25,86 @@ public class Ensamblador {
     /**
      * @param args the command line arguments
      */
+    
+    
     public static void main(String[] args) throws FileNotFoundException, IOException {
        ArrayList<String> instructions = new ArrayList<String>();
        ArrayList<String> instructionsCorrected = new ArrayList<String>();
+       List<List<String>> hashTableLabels= new ArrayList<>();
         Ensamblador ensamblador = new Ensamblador();
         instructions = ensamblador.readFile();
         PrintWriter file = new PrintWriter("binary.txt", "UTF-8");
 
         RiskDetection riskDetection = new RiskDetection();
         instructionsCorrected = riskDetection.principal(instructions);
-        //ensamblador.printInstructions(instructionsCorrected);
-        ensamblador.ensamblador(instructionsCorrected, file);
+       // ensamblador.printInstructions(instructionsCorrected);
+        ensamblador.fillLabels(hashTableLabels,instructionsCorrected);
+        ensamblador.ensamblador(instructionsCorrected, file,hashTableLabels);
         file.close();
     }
     
+    public void fillLabels(List<List<String>> hashTableLabels,ArrayList<String> instructions)
+    {
+        int pcCounter=0;
+        String  mnemonic = "";
+        String[] parts;
+       
+        for(int i = 0; i < instructions.size(); i++){
+            String instruction = instructions.get(i);
+            //System.out.println("instruccion " + i + " " + instruction);
+            parts = instruction.split(" ");
+            mnemonic = parts[0];
+            switch (mnemonic)
+            {
+                case "add"://Type I or R
+                case "add.d":
+                case "addi":
+                case "sub.d":
+                case "xor":
+                case "xor.d":               
+                case "mov"://Type I               
+                case "movi"://Type I                
+                case "mov.d":                
+                case "ror.d"://Type I
+                case "rol.d":
+                case "lsl.d":
+                case "lsr.d":                
+                case "cmp"://Type I                
+                case "beq"://Type B                
+                case "load"://Type R
+                case "load.d":                   
+                case "store":
+                case "store.d":                
+                case "nop":
+                    break;
+                default: 
+                       // System.out.println(pcCounter+" "+instruction);
+                        List<String> aux = new ArrayList<>();
+                        aux.add(instruction);
+                        aux.add(Integer.toBinaryString(pcCounter));
+                        hashTableLabels.add(aux);
+                        pcCounter=pcCounter-4;
+                        break;
+            }  
+            pcCounter+=4;
+    
+}
+    
+        
+    }
+    public int findLabel(String label,List<List<String>> hashTableLabels) {
+        //System.out.println(label);
+
+        int out = -1;
+
+        for (int i = 0; i < hashTableLabels.size(); i++) {
+            if (hashTableLabels.get(i).get(0).equals(label)) {
+                out = Integer.parseInt(hashTableLabels.get(i).get(1));
+            }
+        }
+        return out;
+
+    }
     
     public void printInstructions(ArrayList<String> instructions){
         System.out.println("------- Instructions printed -------");
@@ -48,17 +115,24 @@ public class Ensamblador {
     
     public String getmNemonic(String mNemonic)
     {
-        if (mNemonic.contains("add")) {
-            return("00001");
+        if (mNemonic.contains("addi")) {
+            return("10011");
             
-        }
-        else if(mNemonic.contains("add.d"))
+        }        
+        else if(mNemonic.contains("add"))
+        {
+            return("00001");            
+        }else if(mNemonic.contains("add.d"))
         {
             return("00010");            
         }
-        else if(mNemonic.contains("mov"))
+        else if(mNemonic.contains("movi"))
         {
             return("00011");            
+        }
+        else if(mNemonic.contains("mov"))
+        {
+            return("10010");            
         }
         else if(mNemonic.contains("mov.d"))
         {
@@ -342,15 +416,21 @@ public class Ensamblador {
         return aux;
     }
     
-    
-    public void ensamblador(ArrayList<String> instructions, PrintWriter file){
+    //Address = ( PC_Etiqueta -  (PC_Actual +4 )) /4
+    public void ensamblador(ArrayList<String> instructions, PrintWriter file,List<List<String>> hashTableLabels){        
+       
         ArrayList<String> assembly = new ArrayList<String>();
         String instruction, mnemonic = "", rs = "", rt = "", rd = "", imm = "", addr = "", shamt="";
         String[] parts;
-        
+        boolean label=false;
+        int pcCounter=0;
+       
         for(int i = 0; i < instructions.size(); i++){
+            String binaryCode="5'd"+i+ "  : data_out = {32'b";
+           
+            
             instruction = instructions.get(i);
-            System.out.println("instruccion " + i + " " + instruction);
+            //System.out.println("instruccion " + i + " " + instruction);
 
             parts = instruction.split(" ");
             mnemonic = parts[0];
@@ -363,6 +443,7 @@ public class Ensamblador {
             switch (mnemonic){
                 case "add"://Type I or R
                 case "add.d":
+                case "addi":
                 case "sub.d":
                 case "xor":
                 case "xor.d":
@@ -374,8 +455,10 @@ public class Ensamblador {
                         file.println(getmNemonic(mnemonic)+getRegister(rt)+getRegister(rs)
                                 +getBinary(Integer.parseInt((imm))));
                         
-                        System.out.println(getmNemonic(mnemonic)+getRegister(rt)+getRegister(rs)
-                                +getBinary(Integer.parseInt((imm))));
+                        binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rt)+getRegister(rs)
+                                +getBinary(Integer.parseInt((imm)));
+                        //System.out.println(getmNemonic(mnemonic)+getRegister(rt)+getRegister(rs)
+                                //+getBinary(Integer.parseInt((imm))));
                         
                        // getRegister(rt);
                     //getBinary(i)
@@ -389,19 +472,33 @@ public class Ensamblador {
                         file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+getRegister(rd)
                                 +"000000000000");
                         
-                         System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+getRegister(rd)
-                                +"000000000000");
+                         binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+getRegister(rd)
+                                +"000000000000";
+                                 //System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+getRegister(rd)
+                               // +"000000000000");
                     }
                     break;
                 case "mov"://Type I
+                    rd = parts[1].replace(",", "");
+                    rs = parts[2].replace(",", "");
+                    
+                    file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rd)+"00000"
+                                +"000000000000");
+                   // System.out.println(getRegister(rs)+","+getRegister(rd));
+                    binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rs)+getRegister(rs)+getRegister(rd)
+                                +"000000000000";
+                    break;
+                case "movi"://Type I                
                 case "mov.d":
                     rt = parts[1].replace(",", "");
                     imm = parts[2].replace("#", "");
                     
                     file.println(getmNemonic(mnemonic)+ "00000" + getRegister(rt)
                                 +getBinary(Integer.parseInt((imm))));
-                    System.out.println(getmNemonic(mnemonic)+ "00000" + getRegister(rt)
-                                +getBinary(Integer.parseInt((imm))));
+                    binaryCode=binaryCode+getmNemonic(mnemonic)+ "00000" + getRegister(rt)
+                                +getBinary(Integer.parseInt((imm)));
+                   // System.out.println(getmNemonic(mnemonic)+ "00000" + getRegister(rt)
+                               // +getBinary(Integer.parseInt((imm))));
                     break;
                 case "ror.d"://Type I
                 case "rol.d":
@@ -412,8 +509,10 @@ public class Ensamblador {
                     shamt = parts[3].replace("#", "");                    
                     file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"//XXXXXXXXXXXXXXXXXXXXXXXXXXXx posible error con los registros
                                 +getBinaryShamt(Integer.parseInt((shamt))));
-                    System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
-                                +getBinaryShamt(Integer.parseInt((shamt))));
+                     binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
+                                +getBinaryShamt(Integer.parseInt((shamt)));
+                          //   System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
+                           //     +getBinaryShamt(Integer.parseInt((shamt))));
                     break;
                 case "cmp"://Type I
                     rt = parts[1].replace(",", "");
@@ -421,39 +520,67 @@ public class Ensamblador {
                     
                     file.println(getmNemonic(mnemonic)+"00000"+getRegister(rt)
                                 +getBinary(Integer.parseInt((imm))));
-                    System.out.println(getmNemonic(mnemonic)+"00000"+getRegister(rt)
-                                +getBinary(Integer.parseInt((imm))));
+                    
+                     binaryCode=binaryCode+getmNemonic(mnemonic)+"00000"+getRegister(rt)
+                                +getBinary(Integer.parseInt((imm)));
+                   // System.out.println(getmNemonic(mnemonic)+"00000"+getRegister(rt)
+                             //   +getBinary(Integer.parseInt((imm))));
                     break;
                 case "beq"://Type B
-                    addr = parts[1];
-                    addr=addr.replace("#","");
-                    file.println(getmNemonic(mnemonic)+getBinaryAdress(Integer.parseInt((addr))));
-                    System.out.println(getmNemonic(mnemonic)+getBinaryAdress(Integer.parseInt((addr))));
+                   // addr = parts[1];
+                   // addr=addr.replace("#","");
+                  //  file.println(getmNemonic(mnemonic)+getBinaryAdress(Integer.parseInt((addr))));
+                    
+                  //  binaryCode=binaryCode+getmNemonic(mnemonic)+getBinaryAdress(Integer.parseInt((addr)));
+                 //   System.out.println(getmNemonic(mnemonic)+getBinaryAdress(Integer.parseInt((addr))));
                     break;
                 case "load"://Type R
                 case "load.d":
-                case "store":
-                case "store.d":
                     rs = parts[1].replace(",", "");
                     rt = parts[2];
                     file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
                                 +"000000000000");
-                    System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
+                    binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
+                                +"000000000000";
+                    break;
+                case "store":
+                case "store.d":
+                    rs = parts[2].replace(",", "");
+                    rt = parts[1];
+                    file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
                                 +"000000000000");
+                    binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
+                                +"000000000000";
+                 //   System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
+                          //      +"000000000000");
                     break;
                 case "nop":
                     file.println("00000000000000000000000000000000");
-                    System.out.println("00000000000000000000000000000000");
+                    binaryCode=binaryCode+"00000000000000000000000000000000";
+                           // System.out.println("00000000000000000000000000000000");
+                    break;
                 default: 
-                        System.out.println("Instruction default");
+                    label=true;
+                   
+                       // System.out.println(pcCounter+" "+instruction);
+                        //System.out.println("instruction: "+instruction+", "+findLabel(instruction, hashTableLabels));
                         break;
+                
+                
+            }     
+           
+            if(label==false)
+            {
+                 pcCounter=pcCounter+4;
+            binaryCode=binaryCode+"};            //"+instruction;
+            System.out.println(binaryCode);
             }
+            else
+            {
+                label=false;
+            }
+                    
             
-            System.out.println("rs: " + rs);
-            System.out.println("rt: " + rt);
-            System.out.println("rd: " + rd);
-            System.out.println("imm: " + imm);
-            System.out.println("addr: " + addr);
         }
 
     }

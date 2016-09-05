@@ -51,7 +51,7 @@ module reg_file(clk, RegWrite, RN1, RN2, WN, RD1, RD2, WD);
 	
 integer i;
   initial begin
-    for (i=0; i<32; i=i+1) file_array[i] = 1;
+    for (i=0; i<32; i=i+1) file_array[i] = i;
   end
 endmodule
 

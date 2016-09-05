@@ -1,0 +1,36 @@
+Running: C:\Xilinx\14.7\ISE_DS\ISE\bin\nt64\unwrapped\fuse.exe -intstyle ise -incremental -lib unisims_ver -lib unimacro_ver -lib xilinxcorelib_ver -lib secureip -o C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/simulation_isim_beh.exe -prj C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/simulation_beh.prj work.simulation work.glbl 
+ISim P.20131013 (signature 0x7708f090)
+Number of CPUs detected in this system: 8
+Turning on mult-threading, number of parallel sub-compilation jobs: 16 
+Determining compilation order of HDL files
+Analyzing Verilog file "C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/../Pipeline_Source/rom32.v" into library work
+Analyzing Verilog file "C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/../Pipeline_Source/reg_file.v" into library work
+Analyzing Verilog file "C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/../Pipeline_Source/reg32.v" into library work
+Analyzing Verilog file "C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/../Pipeline_Source/mux2.v" into library work
+Analyzing Verilog file "C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/../Pipeline_Source/mem32.v" into library work
+Analyzing Verilog file "C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/../Pipeline_Source/control_pipeline.v" into library work
+Analyzing Verilog file "C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/../Pipeline_Source/alu.v" into library work
+Analyzing Verilog file "C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/../Pipeline_Source/add32.v" into library work
+Analyzing Verilog file "C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/../Pipeline_Source/mips_pipeline.v" into library work
+Analyzing Verilog file "C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/../Pipeline_Source/Simulation.v" into library work
+Analyzing Verilog file "C:/Xilinx/14.7/ISE_DS/ISE//verilog/src/glbl.v" into library work
+Starting static elaboration
+Completed static elaboration
+Compiling module reg32
+Compiling module add32
+Compiling module mux2
+Compiling module rom32
+Compiling module reg_file
+Compiling module control_pipeline
+Compiling module mux2(bitwidth=1)
+Compiling module alu
+Compiling module mux2(bitwidth=5)
+Compiling module mem32
+Compiling module mips_pipeline
+Compiling module simulation
+Compiling module glbl
+Time Resolution for simulation is 1ps.
+Compiled 13 Verilog Units
+Built simulation executable C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/simulation_isim_beh.exe
+Fuse Memory Usage: 26748 KB
+Fuse CPU Usage: 515 ms

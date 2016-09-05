@@ -71,7 +71,7 @@ public class RiskDetection {
                     nops = 3; //insert 3 nops
                 }
                 
-                System.out.println("rs " + characters.get(1)+ " rd " + characters.get(2)+ " rt " + characters.get(3));
+               // System.out.println("rs " + characters.get(1)+ " rd " + characters.get(2)+ " rt " + characters.get(3));
                 if(rs.equalsIgnoreCase(characters.get(2)) || rs.equalsIgnoreCase(characters.get(3))){//Revisar si el siguiente operando (rt, rd) es igual
                     //System.out.println("Insertar 2 nops. Operando");
                     if(nops < 2)
@@ -118,6 +118,7 @@ public class RiskDetection {
         mnemonic = parts[0];
         switch (mnemonic) {
             case "add"://Type I or R
+            case "addi":
             case "add.d":
             case "sub.d":
             case "xor":
@@ -131,6 +132,7 @@ public class RiskDetection {
                     rd = parts[3];
                 }
                 break;
+            case "movi"://Type I
             case "mov"://Type I
             case "mov.d":
                 rs = parts[1].replace(",", "");
@@ -153,7 +155,7 @@ public class RiskDetection {
                 rt = parts[2];
                 break;
             default:
-                System.out.println("Instruction characters default");
+             //   System.out.println("Instruction characters default");
                 System.out.println("The wrong mnemonic is: " + mnemonic);
                 break;
         }

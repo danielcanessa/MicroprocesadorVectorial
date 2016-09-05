@@ -33,7 +33,7 @@ module alu(ctl, a, b, result, zero);
       4'b0001 : result = a + b; // ADD
 	  4'b0010 : result = a ^ b; // XOR
 	  4'b0011 : result = a - b; // SUB - BEQ
-	  4'b1000 : result = b;     // MOV	      
+	  4'b1000 : result = b;     // MOVI	      
       default : result = 32'd0;
    endcase
    if (result == 32'd0) zero = 1;

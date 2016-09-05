@@ -62,6 +62,6 @@ module mem32(clk, mem_read, mem_write, address, data_in, data_out);
  
   integer i;
   initial begin
-    for (i=0; i<32; i=i+1) mem_array[i] = i;
+    for (i=0; i<32; i=i+1) mem_array[i] = 0;
   end
 endmodule

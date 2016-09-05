@@ -1,0 +1,188 @@
+ISim log file
+Running: C:\Users\Daniel\Desktop\TEC\TEC XIII Semestre\Arqui II\MicroprocesadorVectorial\MicroVectorial\simulation_isim_beh.exe -intstyle ise -gui -tclbatch isim.cmd -wdb C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/MicroVectorial/simulation_isim_beh.wdb 
+ISim P.20131013 (signature 0x7708f090)
+WARNING: A WEBPACK license was found.
+WARNING: Please use Xilinx License Configuration Manager to check out a full ISim license.
+WARNING: ISim will run in Lite mode. Please refer to the ISim documentation for more information on the differences between the Lite and the Full version.
+This is a Lite version of ISim.
+Time resolution is 1 ps
+# onerror resume
+# wave add /
+# run 1000 ns
+Simulator is doing circuit initialization process.
+Finished circuit initialization process.
+                  15 reg_file[ 0] =>          0 (Port 2)
+                  15 reg_file[ 0] =>          0 (Port 1)
+control_single unimplemented opcode  0
+                  15 reg_file[ 0] =>          0 (Port 2)
+                  15 reg_file[ 0] =>          0 (Port 1)
+                  15 reading data: rom32[00000000] => 1804000a
+                  25 reg_file[ 2] =>          2 (Port 2)
+                  25 reg_file[ 2] =>          2 (Port 2)
+                  25 reading data: rom32[00000004] => 00000000
+                  35 reg_file[ 0] =>          0 (Port 2)
+control_single unimplemented opcode  0
+                  35 reg_file[ 0] =>          0 (Port 2)
+                  35 reading data: rom32[00000008] => 00000000
+                  45 reading data: rom32[0000000c] => 00000000
+                  55 reading data: rom32[00000010] => 00000000
+                  60 reg_file[ 2] <=         10 (Write)
+                  65 reading data: rom32[00000014] => 90843000
+                  75 reg_file[ 2] =>         10 (Port 2)
+                  75 reg_file[ 2] =>         10 (Port 1)
+                  75 reg_file[ 2] =>         10 (Port 2)
+                  75 reg_file[ 2] =>         10 (Port 1)
+                  75 reading data: rom32[00000018] => xxxxxxxx
+                  85 reg_file[ x] =>          x (Port 2)
+                  85 reg_file[ x] =>          x (Port 1)
+control_single unimplemented opcode  x
+                  85 reg_file[ x] =>          x (Port 2)
+                  85 reg_file[ x] =>          x (Port 1)
+                  85 reading data: rom32[0000001c] => xxxxxxxx
+                  95 reading data: rom32[00000020] => xxxxxxxx
+                 105 reading data: rom32[00000024] => xxxxxxxx
+                 110 reg_file[ 3] <=         10 (Write)
+                 115 reading data: rom32[00000028] => xxxxxxxx
+                 125 reading data: rom32[0000002c] => xxxxxxxx
+                 135 reading data: rom32[00000030] => xxxxxxxx
+                 145 reading data: rom32[00000034] => xxxxxxxx
+                 155 reading data: rom32[00000038] => xxxxxxxx
+                 165 reading data: rom32[0000003c] => xxxxxxxx
+                 175 reading data: rom32[00000040] => xxxxxxxx
+                 185 reading data: rom32[00000044] => xxxxxxxx
+                 195 reading data: rom32[00000048] => xxxxxxxx
+                 205 reading data: rom32[0000004c] => xxxxxxxx
+                 215 reading data: rom32[00000050] => xxxxxxxx
+                 225 reading data: rom32[00000054] => xxxxxxxx
+                 235 reading data: rom32[00000058] => xxxxxxxx
+                 245 reading data: rom32[0000005c] => xxxxxxxx
+                 255 reading data: rom32[00000060] => xxxxxxxx
+                 265 reading data: rom32[00000064] => xxxxxxxx
+                 275 reading data: rom32[00000068] => xxxxxxxx
+                 285 reading data: rom32[0000006c] => xxxxxxxx
+                 295 reading data: rom32[00000070] => xxxxxxxx
+                 305 reading data: rom32[00000074] => xxxxxxxx
+                 315 reading data: rom32[00000078] => xxxxxxxx
+                 325 reading data: rom32[0000007c] => xxxxxxxx
+                 335 reading data: rom32[00000080] => xxxxxxxx
+                 345 reading data: rom32[00000084] => xxxxxxxx
+                 355 reading data: rom32[00000088] => xxxxxxxx
+                 365 reading data: rom32[0000008c] => xxxxxxxx
+                 375 reading data: rom32[00000090] => xxxxxxxx
+                 385 reading data: rom32[00000094] => xxxxxxxx
+                 395 reading data: rom32[00000098] => xxxxxxxx
+                 405 reading data: rom32[0000009c] => xxxxxxxx
+                 415 reading data: rom32[000000a0] => xxxxxxxx
+                 425 reading data: rom32[000000a4] => xxxxxxxx
+                 435 reading data: rom32[000000a8] => xxxxxxxx
+                 445 reading data: rom32[000000ac] => xxxxxxxx
+                 455 reading data: rom32[000000b0] => xxxxxxxx
+                 465 reading data: rom32[000000b4] => xxxxxxxx
+                 475 reading data: rom32[000000b8] => xxxxxxxx
+                 485 reading data: rom32[000000bc] => xxxxxxxx
+                 495 reading data: rom32[000000c0] => xxxxxxxx
+                 505 reading data: rom32[000000c4] => xxxxxxxx
+                 515 reading data: rom32[000000c8] => xxxxxxxx
+                 525 reading data: rom32[000000cc] => xxxxxxxx
+                 535 reading data: rom32[000000d0] => xxxxxxxx
+                 545 reading data: rom32[000000d4] => xxxxxxxx
+                 555 reading data: rom32[000000d8] => xxxxxxxx
+                 565 reading data: rom32[000000dc] => xxxxxxxx
+                 575 reading data: rom32[000000e0] => xxxxxxxx
+                 585 reading data: rom32[000000e4] => xxxxxxxx
+                 595 reading data: rom32[000000e8] => xxxxxxxx
+                 605 reading data: rom32[000000ec] => xxxxxxxx
+                 615 reading data: rom32[000000f0] => xxxxxxxx
+                 625 reading data: rom32[000000f4] => xxxxxxxx
+                 635 reading data: rom32[000000f8] => xxxxxxxx
+                 645 reading data: rom32[000000fc] => xxxxxxxx
+# restart
+# run all
+Simulator is doing circuit initialization process.
+Finished circuit initialization process.
+                  15 reg_file[ 0] =>          0 (Port 2)
+                  15 reg_file[ 0] =>          0 (Port 1)
+control_single unimplemented opcode  0
+                  15 reg_file[ 0] =>          0 (Port 2)
+                  15 reg_file[ 0] =>          0 (Port 1)
+                  15 reading data: rom32[00000000] => 1804000a
+                  25 reg_file[ 2] =>          2 (Port 2)
+                  25 reg_file[ 2] =>          2 (Port 2)
+                  25 reading data: rom32[00000004] => 00000000
+                  35 reg_file[ 0] =>          0 (Port 2)
+control_single unimplemented opcode  0
+                  35 reg_file[ 0] =>          0 (Port 2)
+                  35 reading data: rom32[00000008] => 00000000
+                  45 reading data: rom32[0000000c] => 00000000
+                  55 reading data: rom32[00000010] => 00000000
+                  60 reg_file[ 2] <=         10 (Write)
+                  65 reading data: rom32[00000014] => 90843000
+                  75 reg_file[ 2] =>         10 (Port 2)
+                  75 reg_file[ 2] =>         10 (Port 1)
+                  75 reg_file[ 2] =>         10 (Port 2)
+                  75 reg_file[ 2] =>         10 (Port 1)
+                  75 reading data: rom32[00000018] => xxxxxxxx
+                  85 reg_file[ x] =>          x (Port 2)
+                  85 reg_file[ x] =>          x (Port 1)
+control_single unimplemented opcode  x
+                  85 reg_file[ x] =>          x (Port 2)
+                  85 reg_file[ x] =>          x (Port 1)
+                  85 reading data: rom32[0000001c] => xxxxxxxx
+                  95 reading data: rom32[00000020] => xxxxxxxx
+                 105 reading data: rom32[00000024] => xxxxxxxx
+                 110 reg_file[ 3] <=         10 (Write)
+                 115 reading data: rom32[00000028] => xxxxxxxx
+                 125 reading data: rom32[0000002c] => xxxxxxxx
+                 135 reading data: rom32[00000030] => xxxxxxxx
+                 145 reading data: rom32[00000034] => xxxxxxxx
+                 155 reading data: rom32[00000038] => xxxxxxxx
+                 165 reading data: rom32[0000003c] => xxxxxxxx
+                 175 reading data: rom32[00000040] => xxxxxxxx
+                 185 reading data: rom32[00000044] => xxxxxxxx
+                 195 reading data: rom32[00000048] => xxxxxxxx
+                 205 reading data: rom32[0000004c] => xxxxxxxx
+                 215 reading data: rom32[00000050] => xxxxxxxx
+                 225 reading data: rom32[00000054] => xxxxxxxx
+                 235 reading data: rom32[00000058] => xxxxxxxx
+                 245 reading data: rom32[0000005c] => xxxxxxxx
+                 255 reading data: rom32[00000060] => xxxxxxxx
+                 265 reading data: rom32[00000064] => xxxxxxxx
+                 275 reading data: rom32[00000068] => xxxxxxxx
+                 285 reading data: rom32[0000006c] => xxxxxxxx
+                 295 reading data: rom32[00000070] => xxxxxxxx
+                 305 reading data: rom32[00000074] => xxxxxxxx
+                 315 reading data: rom32[00000078] => xxxxxxxx
+                 325 reading data: rom32[0000007c] => xxxxxxxx
+                 335 reading data: rom32[00000080] => xxxxxxxx
+                 345 reading data: rom32[00000084] => xxxxxxxx
+                 355 reading data: rom32[00000088] => xxxxxxxx
+                 365 reading data: rom32[0000008c] => xxxxxxxx
+                 375 reading data: rom32[00000090] => xxxxxxxx
+                 385 reading data: rom32[00000094] => xxxxxxxx
+                 395 reading data: rom32[00000098] => xxxxxxxx
+                 405 reading data: rom32[0000009c] => xxxxxxxx
+                 415 reading data: rom32[000000a0] => xxxxxxxx
+                 425 reading data: rom32[000000a4] => xxxxxxxx
+                 435 reading data: rom32[000000a8] => xxxxxxxx
+                 445 reading data: rom32[000000ac] => xxxxxxxx
+                 455 reading data: rom32[000000b0] => xxxxxxxx
+                 465 reading data: rom32[000000b4] => xxxxxxxx
+                 475 reading data: rom32[000000b8] => xxxxxxxx
+                 485 reading data: rom32[000000bc] => xxxxxxxx
+                 495 reading data: rom32[000000c0] => xxxxxxxx
+                 505 reading data: rom32[000000c4] => xxxxxxxx
+                 515 reading data: rom32[000000c8] => xxxxxxxx
+                 525 reading data: rom32[000000cc] => xxxxxxxx
+                 535 reading data: rom32[000000d0] => xxxxxxxx
+                 545 reading data: rom32[000000d4] => xxxxxxxx
+                 555 reading data: rom32[000000d8] => xxxxxxxx
+                 565 reading data: rom32[000000dc] => xxxxxxxx
+                 575 reading data: rom32[000000e0] => xxxxxxxx
+                 585 reading data: rom32[000000e4] => xxxxxxxx
+                 595 reading data: rom32[000000e8] => xxxxxxxx
+                 605 reading data: rom32[000000ec] => xxxxxxxx
+                 615 reading data: rom32[000000f0] => xxxxxxxx
+                 625 reading data: rom32[000000f4] => xxxxxxxx
+                 635 reading data: rom32[000000f8] => xxxxxxxx
+                 645 reading data: rom32[000000fc] => xxxxxxxx
+Stopped at time : 1305125 ns : File "C:/Users/Daniel/Desktop/TEC/TEC XIII Semestre/Arqui II/MicroprocesadorVectorial/Pipeline_Source/add32.v" Line 23
