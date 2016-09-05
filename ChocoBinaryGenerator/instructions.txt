@@ -1,2 +1,5 @@
-mov r2, #10
-mov r3, #3
+movi r2, #10
+nop
+mov r3, r2
+nop
+addi r1, r2, #5

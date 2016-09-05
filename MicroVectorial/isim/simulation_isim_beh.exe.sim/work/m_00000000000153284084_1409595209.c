@@ -35,8 +35,14 @@ static unsigned int ng10[] = {3U, 0U};
 static unsigned int ng11[] = {4U, 0U};
 static unsigned int ng12[] = {5U, 0U};
 static unsigned int ng13[] = {2424582144U, 0U};
-static unsigned int ng14[] = {4294967295U, 4294967295U};
-static const char *ng15 = " reading data: rom32[%h] => %h";
+static unsigned int ng14[] = {6U, 0U};
+static unsigned int ng15[] = {7U, 0U};
+static unsigned int ng16[] = {8U, 0U};
+static unsigned int ng17[] = {9U, 0U};
+static unsigned int ng18[] = {10U, 0U};
+static unsigned int ng19[] = {2558656517U, 0U};
+static unsigned int ng20[] = {4294967295U, 4294967295U};
+static const char *ng21 = " reading data: rom32[%h] => %h";
 
 
 
@@ -426,14 +432,39 @@ LAB31:    t2 = ((char*)((ng12)));
     if (t34 == 1)
         goto LAB32;
 
-LAB33:
-LAB35:
-LAB34:    xsi_set_current_line(72, ng0);
-    t2 = ((char*)((ng14)));
+LAB33:    t2 = ((char*)((ng14)));
+    t34 = xsi_vlog_unsigned_case_compare(t23, 6, t2, 6);
+    if (t34 == 1)
+        goto LAB34;
+
+LAB35:    t2 = ((char*)((ng15)));
+    t34 = xsi_vlog_unsigned_case_compare(t23, 6, t2, 6);
+    if (t34 == 1)
+        goto LAB36;
+
+LAB37:    t2 = ((char*)((ng16)));
+    t34 = xsi_vlog_unsigned_case_compare(t23, 6, t2, 6);
+    if (t34 == 1)
+        goto LAB38;
+
+LAB39:    t2 = ((char*)((ng17)));
+    t34 = xsi_vlog_unsigned_case_compare(t23, 6, t2, 6);
+    if (t34 == 1)
+        goto LAB40;
+
+LAB41:    t2 = ((char*)((ng18)));
+    t34 = xsi_vlog_unsigned_case_compare(t23, 6, t2, 6);
+    if (t34 == 1)
+        goto LAB42;
+
+LAB43:
+LAB45:
+LAB44:    xsi_set_current_line(77, ng0);
+    t2 = ((char*)((ng20)));
     t3 = (t0 + 1904);
     xsi_vlogvar_assign_value(t3, t2, 0, 0, 32);
 
-LAB36:    xsi_set_current_line(75, ng0);
+LAB46:    xsi_set_current_line(80, ng0);
     t2 = xsi_vlog_time(t30, 1000.0000000000000, 1000.0000000000000);
     xsi_vlogfile_write(0, 0, 0, ng4, 2, t0, (char)118, t30, 64);
     t3 = (t0 + 1184U);
@@ -441,44 +472,74 @@ LAB36:    xsi_set_current_line(75, ng0);
     t3 = (t0 + 1904);
     t5 = (t3 + 56U);
     t7 = *((char **)t5);
-    xsi_vlogfile_write(1, 0, 0, ng15, 3, t0, (char)118, t4, 32, (char)118, t7, 32);
+    xsi_vlogfile_write(1, 0, 0, ng21, 3, t0, (char)118, t4, 32, (char)118, t7, 32);
     goto LAB19;
 
 LAB22:    xsi_set_current_line(28, ng0);
     t24 = ((char*)((ng7)));
     t31 = (t0 + 1904);
     xsi_vlogvar_assign_value(t31, t24, 0, 0, 32);
-    goto LAB36;
+    goto LAB46;
 
 LAB24:    xsi_set_current_line(29, ng0);
     t3 = ((char*)((ng1)));
     t4 = (t0 + 1904);
     xsi_vlogvar_assign_value(t4, t3, 0, 0, 32);
-    goto LAB36;
+    goto LAB46;
 
 LAB26:    xsi_set_current_line(30, ng0);
     t3 = ((char*)((ng1)));
     t4 = (t0 + 1904);
     xsi_vlogvar_assign_value(t4, t3, 0, 0, 32);
-    goto LAB36;
+    goto LAB46;
 
 LAB28:    xsi_set_current_line(31, ng0);
     t3 = ((char*)((ng1)));
     t4 = (t0 + 1904);
     xsi_vlogvar_assign_value(t4, t3, 0, 0, 32);
-    goto LAB36;
+    goto LAB46;
 
 LAB30:    xsi_set_current_line(32, ng0);
     t3 = ((char*)((ng1)));
     t4 = (t0 + 1904);
     xsi_vlogvar_assign_value(t4, t3, 0, 0, 32);
-    goto LAB36;
+    goto LAB46;
 
 LAB32:    xsi_set_current_line(33, ng0);
     t3 = ((char*)((ng13)));
     t4 = (t0 + 1904);
     xsi_vlogvar_assign_value(t4, t3, 0, 0, 32);
-    goto LAB36;
+    goto LAB46;
+
+LAB34:    xsi_set_current_line(34, ng0);
+    t3 = ((char*)((ng1)));
+    t4 = (t0 + 1904);
+    xsi_vlogvar_assign_value(t4, t3, 0, 0, 32);
+    goto LAB46;
+
+LAB36:    xsi_set_current_line(35, ng0);
+    t3 = ((char*)((ng1)));
+    t4 = (t0 + 1904);
+    xsi_vlogvar_assign_value(t4, t3, 0, 0, 32);
+    goto LAB46;
+
+LAB38:    xsi_set_current_line(36, ng0);
+    t3 = ((char*)((ng1)));
+    t4 = (t0 + 1904);
+    xsi_vlogvar_assign_value(t4, t3, 0, 0, 32);
+    goto LAB46;
+
+LAB40:    xsi_set_current_line(37, ng0);
+    t3 = ((char*)((ng1)));
+    t4 = (t0 + 1904);
+    xsi_vlogvar_assign_value(t4, t3, 0, 0, 32);
+    goto LAB46;
+
+LAB42:    xsi_set_current_line(38, ng0);
+    t3 = ((char*)((ng19)));
+    t4 = (t0 + 1904);
+    xsi_vlogvar_assign_value(t4, t3, 0, 0, 32);
+    goto LAB46;
 
 }
 

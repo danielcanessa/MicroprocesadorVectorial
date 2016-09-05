@@ -465,13 +465,14 @@ public class Ensamblador {
                       //  getmNemonic(mnemonic);
                       
                     }else{//type R
-                        rs = parts[1].replace(",", "");
-                        rt = parts[2].replace(",", "");
-                        rd = parts[3];
-                        
+                        rd = parts[1].replace(",", "");
+                        rs = parts[2].replace(",", "");
+                        rt = parts[3];
+                   //     System.out.println(rs+", "+rt+", "+rd);
                         file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+getRegister(rd)
                                 +"000000000000");
-                        
+                     //   b=r3 a=r2 1=r1
+                                
                          binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+getRegister(rd)
                                 +"000000000000";
                                  //System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+getRegister(rd)
@@ -504,12 +505,12 @@ public class Ensamblador {
                 case "rol.d":
                 case "lsl.d":
                 case "lsr.d":
-                    rs = parts[1].replace(",", "");
-                    rt = parts[2].replace(",", "");
+                    rd = parts[1].replace(",", "");
+                    rs = parts[2].replace(",", "");
                     shamt = parts[3].replace("#", "");                    
-                    file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"//XXXXXXXXXXXXXXXXXXXXXXXXXXXx posible error con los registros
+                    file.println(getmNemonic(mnemonic)+getRegister(rs)+"00000"+getRegister(rd)//XXXXXXXXXXXXXXXXXXXXXXXXXXXx posible error con los registros
                                 +getBinaryShamt(Integer.parseInt((shamt))));
-                     binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
+                     binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rs)+"00000"+getRegister(rd)
                                 +getBinaryShamt(Integer.parseInt((shamt)));
                           //   System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
                            //     +getBinaryShamt(Integer.parseInt((shamt))));
