@@ -37,7 +37,8 @@ public class Ensamblador {
 
         RiskDetection riskDetection = new RiskDetection();
         instructionsCorrected = riskDetection.principal(instructions);
-       // ensamblador.printInstructions(instructionsCorrected);
+        ensamblador.printInstructions(instructionsCorrected);
+        System.out.println("---------------------------------------");
         ensamblador.fillLabels(hashTableLabels,instructionsCorrected);
         ensamblador.ensamblador(instructionsCorrected, file,hashTableLabels);
         file.close();
@@ -68,8 +69,7 @@ public class Ensamblador {
                 case "ror.d"://Type I
                 case "rol.d":
                 case "lsl.d":
-                case "lsr.d":                
-                case "cmp"://Type I                
+                case "lsr.d":               
                 case "beq"://Type B                
                 case "load"://Type R
                 case "load.d":                   
@@ -81,7 +81,7 @@ public class Ensamblador {
                        // System.out.println(pcCounter+" "+instruction);
                         List<String> aux = new ArrayList<>();
                         aux.add(instruction);
-                        aux.add(Integer.toBinaryString(pcCounter));
+                        aux.add(Integer.toString(pcCounter));
                         hashTableLabels.add(aux);
                         pcCounter=pcCounter-4;
                         break;
@@ -102,6 +102,7 @@ public class Ensamblador {
                 out = Integer.parseInt(hashTableLabels.get(i).get(1));
             }
         }
+       
         return out;
 
     }
@@ -165,11 +166,7 @@ public class Ensamblador {
         else if(mNemonic.contains("nop")) //tofix
         {
             return("00000");            
-        }
-        else if(mNemonic.contains("cmp"))
-        {
-            return("01011");            
-        }
+        }    
         else if(mNemonic.contains("beq"))
         {
             return("01100");            
@@ -515,26 +512,26 @@ public class Ensamblador {
                           //   System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
                            //     +getBinaryShamt(Integer.parseInt((shamt))));
                     break;
-                case "cmp"://Type I
-                    rt = parts[1].replace(",", "");
-                    imm = parts[2].replace("#", "");
+                case "beq"://Type I
+                    rs = parts[1].replace(",", "");
+                    rt = parts[2].replace(",", "");
+                    imm = parts[3];
                     
-                    file.println(getmNemonic(mnemonic)+"00000"+getRegister(rt)
-                                +getBinary(Integer.parseInt((imm))));
+             //       System.out.println(rs+", "+", "+rt+", "+completeBitsImmediate(findLabel(imm,hashTableLabels)));
+                   /* */
+                    //Address = ( PC_Etiqueta -  (PC_Actual +4 )) /4
+                    int adresss= (findLabel(imm,hashTableLabels)-(pcCounter+4))/4;
+                  //  System.out.println(findLabel(imm,hashTableLabels)+" "+pcCounter);
+                    file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)
+                                +completeBitsImmediate(adresss));
                     
-                     binaryCode=binaryCode+getmNemonic(mnemonic)+"00000"+getRegister(rt)
-                                +getBinary(Integer.parseInt((imm)));
-                   // System.out.println(getmNemonic(mnemonic)+"00000"+getRegister(rt)
+                     binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)
+                                +completeBitsImmediate(adresss);
+                   
+                        // System.out.println(getmNemonic(mnemonic)+"00000"+getRegister(rt)
                              //   +getBinary(Integer.parseInt((imm))));
                     break;
-                case "beq"://Type B
-                   // addr = parts[1];
-                   // addr=addr.replace("#","");
-                  //  file.println(getmNemonic(mnemonic)+getBinaryAdress(Integer.parseInt((addr))));
-                    
-                  //  binaryCode=binaryCode+getmNemonic(mnemonic)+getBinaryAdress(Integer.parseInt((addr)));
-                 //   System.out.println(getmNemonic(mnemonic)+getBinaryAdress(Integer.parseInt((addr))));
-                    break;
+            
                 case "load"://Type R
                 case "load.d":
                     rs = parts[1].replace(",", "");
@@ -565,16 +562,16 @@ public class Ensamblador {
                    
                        // System.out.println(pcCounter+" "+instruction);
                         //System.out.println("instruction: "+instruction+", "+findLabel(instruction, hashTableLabels));
-                        break;
+                    break;
                 
                 
             }     
            
             if(label==false)
             {
-                 pcCounter=pcCounter+4;
-            binaryCode=binaryCode+"};            //"+instruction;
-            System.out.println(binaryCode);
+                pcCounter=pcCounter+4;
+                binaryCode=binaryCode+"};            //"+instruction;
+                System.out.println(binaryCode);
             }
             else
             {
@@ -584,6 +581,23 @@ public class Ensamblador {
             
         }
 
+    }
+    
+    public String completeBitsImmediate(int immediate)
+    {
+        String out="";
+        if (immediate!=-1) {
+            out=Integer.toBinaryString(immediate);
+           // System.out.println(out.length());
+            for (int i = out.length(); i < 17; i++) {
+                out="0"+out;
+            }        
+        }
+        else
+        {
+            System.out.println("Error en el beq, no existe el label");
+        }
+        return out;
     }
     
     public ArrayList<String> readFile() throws UnsupportedEncodingException, FileNotFoundException, IOException{

@@ -10,7 +10,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="25" />
+   <WVObjectSize size="27" />
    <wvobject fp_name="/simulation/clk" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -203,6 +203,14 @@
       <obj_property name="ElementShortName">a[4:0]</obj_property>
       <obj_property name="ObjectShortName">a[4:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simulation/uut/IF_PC/d_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">d_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">d_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simulation/uut/EX_ALU/zero" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">zero</obj_property>
+      <obj_property name="ObjectShortName">zero</obj_property>
    </wvobject>
    <wvobject fp_name="/simulation/uut/EX_RFMUX/b" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">b[4:0]</obj_property>
