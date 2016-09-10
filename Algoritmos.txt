@@ -1,0 +1,103 @@
+----------------Algoritmo XOR----------------------------------------
+movi r1, #0 //indice de la clave del xor 
+load r1, r1 // se carga la clave del xor
+movi r2, #4 //indice para la longitud de la imagen
+load r3, r2 //numero de pixeles, tiene que ser divisible entre 4, si es de 150x150 es 22500
+addi r3, r3, #8 //se hace un desplazamiento
+movi r2, #8 //indice de memoria
+movi r5, #0 
+movi r6, #0
+loop
+beq r2, r3, exit //se compara que no se haya recorrido toda la imagen
+load.d r16, r2 //se carga en un vector 4 posiciones de memoria
+xor.d r16, r16, r1  //se aplica el xor
+store.d r2, r16 //se almacenan los datos modificados
+addi r2, r2, #4 //se aumenta el indice
+beq r5, r6, loop //salta a loop 
+exit 
+---------------Desplazamiento simple izquierda---------------------------------
+movi r1, #0 //indice de la clave del desplazamiento 
+load r1, r1 // se carga la clave del desplazamiento
+movi r2, #4 //indice para la longitud de la imagen
+load r3, r2 //numero de pixeles, tiene que ser divisible entre 4, si es de 150x150 es 22500
+addi r3, r3, #8 //se hace un desplazamiento
+movi r2, #8 //indice de memoria
+movi r5, #0 
+movi r6, #0
+loop
+beq r2, r3, exit //se compara que no se haya recorrido toda la imagen
+load.d r16, r2 //se carga en un vector 4 posiciones de memoria
+lsl.d r16, r16, r1  //se aplica el lsl
+store.d r2, r16 //se almacenan los datos modificados
+addi r2, r2, #4 //se aumenta el indice
+beq r5, r6, loop //salta a loop 
+exit 
+---------------Desplazamiento simple derecha---------------------------------
+movi r1, #0 //indice de la clave del desplazamiento 
+load r1, r1 // se carga la clave del desplazamiento
+movi r2, #4 //indice para la longitud de la imagen
+load r3, r2 //numero de pixeles, tiene que ser divisible entre 4, si es de 150x150 es 22500
+addi r3, r3, #8 //se hace un desplazamiento
+movi r2, #8 //indice de memoria
+movi r5, #0 
+movi r6, #0
+loop
+beq r2, r3, exit //se compara que no se haya recorrido toda la imagen
+load.d r16, r2 //se carga en un vector 4 posiciones de memoria
+lsr.d r16, r16, r1  //se aplica el lsr
+store.d r2, r16 //se almacenan los datos modificados
+addi r2, r2, #4 //se aumenta el indice
+beq r5, r6, loop //salta a loop 
+exit 
+
+---------------Desplazamiento circular derecha---------------------------------
+movi r1, #0 //indice de la clave circular
+load r1, r1 // se carga la clave circular
+movi r2, #4 //indice para la longitud de la imagen
+load r3, r2 //numero de pixeles, tiene que ser divisible entre 4, si es de 150x150 es 22500
+addi r3, r3, #8 //se hace un desplazamiento
+movi r2, #8 //indice de memoria
+movi r5, #0 
+movi r6, #0
+loop
+beq r2, r3, exit //se compara que no se haya recorrido toda la imagen
+load.d r16, r2 //se carga en un vector 4 posiciones de memoria
+ror.d r16, r16, r1  //se aplica el ror
+store.d r2, r16 //se almacenan los datos modificados
+addi r2, r2, #4 //se aumenta el indice
+beq r5, r6, loop //salta a loop 
+exit 
+---------------Desplazamiento circular izquierda---------------------------------
+movi r1, #0 //indice de la clave circular
+load r1, r1 // se carga la clave circular
+movi r2, #4 //indice para la longitud de la imagen
+load r3, r2 //numero de pixeles, tiene que ser divisible entre 4, si es de 150x150 es 22500
+addi r3, r3, #8 //se hace un desplazamiento
+movi r2, #8 //indice de memoria
+movi r5, #0 
+movi r6, #0
+loop
+beq r2, r3, exit //se compara que no se haya recorrido toda la imagen
+load.d r16, r2 //se carga en un vector 4 posiciones de memoria
+rol.d r16, r16, r1  //se aplica el rol
+store.d r2, r16 //se almacenan los datos modificados
+addi r2, r2, #4 //se aumenta el indice
+beq r5, r6, loop //salta a loop 
+exit 
+--------------Suma simple--------------------------------------------------------
+movi r1, #0 //indice para la clave
+load.d r17, r1 //se carga la clave
+movi r1, #4 //indice para la longitud de la imagen
+load r3, r1 //numero de pixeles, tiene que ser divisible entre 4, si es de 150x150 es 22500
+addi r3, r3, #8 //se hace un desplazamiento
+movi r1, #8 //indice memoria
+movi r5, #0 
+movi r6, #0
+loop
+beq r1, r3, exit //se compara que no se haya recorrido toda la imagen
+load.d r16, r1 //se carga en un vector 4 posiciones de memoria
+add.d r16, r16, r17  //se aplica la suma
+store.d r1, r16 //se almacenan los datos modificados
+addi r1, r1, #4 //se aumenta el indice
+beq r5, r6, loop //salta a loop 
+exit 

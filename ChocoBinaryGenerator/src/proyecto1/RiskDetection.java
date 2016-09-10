@@ -149,11 +149,11 @@ public class RiskDetection {
         mnemonic = parts[0];
         switch (mnemonic) {
             case "add"://Type I or R
-            case "add.d":
+            case "add.v":
             case "addi":
-            case "sub.d":
+            case "sub.v":
             case "xor":
-            case "xor.d":
+            case "xor.v":
                 if (instruction.contains("#")) {//type I
                     rs = parts[1].replace(",", "");
                     rt = parts[2].replace(",", "");
@@ -168,13 +168,13 @@ public class RiskDetection {
                 rt = parts[2].replace(",", "");
                 break;
             case "movi"://Type I                
-            case "mov.d":
+            case "mov.v":
                 rs = parts[1].replace(",", "");
                 break;
-            case "ror.d"://Type I
-            case "rol.d":
-            case "lsl.d":
-            case "lsr.d":
+            case "ror.v"://Type I
+            case "rol.v":
+            case "lsl.v":
+            case "lsr.v":
                 rs = parts[1].replace(",", "");
                 rt = parts[2].replace(",", "");
                 break;
@@ -183,12 +183,12 @@ public class RiskDetection {
                 rt = parts[2].replace(",", "");
                 break;
             case "load"://Type R
-            case "load.d":
+            case "load.v":
                 rs = parts[1].replace(",", "");
                 rt = parts[2];
                 break;
             case "store":
-            case "store.d":
+            case "store.v":
                 rs = parts[2].replace(",", "");
                 rt = parts[1];
                 break;

@@ -58,23 +58,23 @@ public class Ensamblador {
             switch (mnemonic)
             {
                 case "add"://Type I or R
-                case "add.d":
+                case "add.v":
                 case "addi":
-                case "sub.d":
+                case "sub.v":
                 case "xor":
-                case "xor.d":               
+                case "xor.v":               
                 case "mov"://Type I               
                 case "movi"://Type I                
-                case "mov.d":                
-                case "ror.d"://Type I
-                case "rol.d":
-                case "lsl.d":
-                case "lsr.d":               
+                case "mov.v":                
+                case "ror.v"://Type I
+                case "rol.v":
+                case "lsl.v":
+                case "lsr.v":               
                 case "beq"://Type B                
                 case "load"://Type R
-                case "load.d":                   
+                case "load.v":                   
                 case "store":
-                case "store.d":                
+                case "store.v":                
                 case "nop":
                     break;
                 default: 
@@ -119,47 +119,48 @@ public class Ensamblador {
         if (mNemonic.contains("addi")) {
             return("10011");
             
-        }        
+        }   
+        else if(mNemonic.contains("add.v"))
+        {
+            return("00010");            
+        }
         else if(mNemonic.contains("add"))
         {
             return("00001");            
-        }else if(mNemonic.contains("add.d"))
-        {
-            return("00010");            
         }
         else if(mNemonic.contains("movi"))
         {
             return("00011");            
         }
+        else if(mNemonic.contains("mov.v"))
+        {
+            return("00100");            
+        }
         else if(mNemonic.contains("mov"))
         {
             return("10010");            
-        }
-        else if(mNemonic.contains("mov.d"))
+        } 
+        else if(mNemonic.contains("xor.v"))
         {
-            return("00100");            
+            return("00110");            
         }
         else if(mNemonic.contains("xor"))
         {
             return("00101");            
-        }
-        else if(mNemonic.contains("xor.d"))
-        {
-            return("00110");            
-        }
-        else if(mNemonic.contains("ror.d"))
+        }        
+        else if(mNemonic.contains("ror.v"))
         {
             return("00111");            
         }
-        else if(mNemonic.contains("rol.d"))
+        else if(mNemonic.contains("rol.v"))
         {
             return("01000");            
         }
-        else if(mNemonic.contains("lsl.d"))
+        else if(mNemonic.contains("lsl.v"))
         {
             return("01001");            
         }
-        else if(mNemonic.contains("lsr.d"))
+        else if(mNemonic.contains("lsr.v"))
         {
             return("01010");            
         }
@@ -171,24 +172,25 @@ public class Ensamblador {
         {
             return("01100");            
         }
+        else if(mNemonic.contains("load.v"))
+        {
+            return("01110");            
+        }
         else if(mNemonic.contains("load"))
         {
             return("01101");            
-        }
-        else if(mNemonic.contains("load.d"))
+        } 
+        else if(mNemonic.contains("store.v"))
         {
-            return("01110");            
+            return("10000");            
         }
         else if(mNemonic.contains("store"))
         {
             return("01111");            
         }
-        else if(mNemonic.contains("store.d"))
-        {
-            return("10000");            
-        }
+        
         //10001
-        else if(mNemonic.contains("sub.d"))
+        else if(mNemonic.contains("sub.v"))
         {
             return("10001");            
         }
@@ -281,82 +283,82 @@ public class Ensamblador {
             return("01111");
             
         }
-        else if(register.contains("r16"))
+        else if(register.contains("v0"))
         {
             return("10000");
             
         }
-        else if(register.contains("r17"))
+        else if(register.contains("v1"))
         {
             return("10001");
             
         }
-        else if(register.contains("r18"))
+        else if(register.contains("v2"))
         {
             return("10010");
             
         }
-        else if(register.contains("r19"))
+        else if(register.contains("v3"))
         {
             return("10011");
             
         }
-        else if(register.contains("r20"))
+        else if(register.contains("v4"))
         {
             return("10100");
             
         }
-        else if(register.contains("r21"))
+        else if(register.contains("v5"))
         {
             return("10101");
             
         }
-        else if(register.contains("r22"))
+        else if(register.contains("v6"))
         {
             
             return("10110");
         }
-        else if(register.contains("r23"))
+        else if(register.contains("v7"))
         {
             return("10111");
             
         }
-        else if(register.contains("r24"))
+        else if(register.contains("v8"))
         {
             return("11000");
             
         }
-        else if(register.contains("r25"))
+        else if(register.contains("v9"))
         {
             return("11001");
             
         }
-        else if(register.contains("r26"))
+        else if(register.contains("v10"))
         {
             return("11010");
             
         }
-        else if(register.contains("r27"))
+        else if(register.contains("v11"))
         {
             return("11011");
             
         }
-        else if(register.contains("r28"))
+        else if(register.contains("v12"))
         {
             return("11100");
             
         }
-        else if(register.contains("r29"))
+        else if(register.contains("v13"))
         {
             return("11101");
             
         }
-        else if(register.contains("r30"))
+        else if(register.contains("v14"))
         {
             return("11110");
             
         }
-        else if(register.contains("r31"))
+        else if(register.contains("v15"))
         {
             return("11111");
             
@@ -439,11 +441,11 @@ public class Ensamblador {
             shamt="";
             switch (mnemonic){
                 case "add"://Type I or R
-                case "add.d":
+                case "add.v":
                 case "addi":
-                case "sub.d":
+                case "sub.v":
                 case "xor":
-                case "xor.d":
+                case "xor.v":
                     if(instruction.contains("#")){//type I
                         rs = parts[1].replace(",", "");
                         rt = parts[2].replace(",", "");
@@ -487,7 +489,7 @@ public class Ensamblador {
                                 +"000000000000";
                     break;
                 case "movi"://Type I                
-                case "mov.d":
+                case "mov.v":
                     rt = parts[1].replace(",", "");
                     imm = parts[2].replace("#", "");
                     
@@ -498,10 +500,10 @@ public class Ensamblador {
                    // System.out.println(getmNemonic(mnemonic)+ "00000" + getRegister(rt)
                                // +getBinary(Integer.parseInt((imm))));
                     break;
-                case "ror.d"://Type I
-                case "rol.d":
-                case "lsl.d":
-                case "lsr.d":
+                case "ror.v"://Type I
+                case "rol.v":
+                case "lsl.v":
+                case "lsr.v":
                     rd = parts[1].replace(",", "");
                     rs = parts[2].replace(",", "");
                     shamt = parts[3].replace("#", "");                    
@@ -517,10 +519,14 @@ public class Ensamblador {
                     rt = parts[2].replace(",", "");
                     imm = parts[3];
                     
-             //       System.out.println(rs+", "+", "+rt+", "+completeBitsImmediate(findLabel(imm,hashTableLabels)));
+                    
                    /* */
                     //Address = ( PC_Etiqueta -  (PC_Actual +4 )) /4
                     int adresss= (findLabel(imm,hashTableLabels)-(pcCounter+4))/4;
+                    
+                 //   System.out.println(rs+", "+", "+rt+", "+completeBitsImmediate(findLabel(imm,hashTableLabels))+", "+adresss);
+                    
+                                        
                   //  System.out.println(findLabel(imm,hashTableLabels)+" "+pcCounter);
                     file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)
                                 +completeBitsImmediate(adresss));
@@ -533,16 +539,25 @@ public class Ensamblador {
                     break;
             
                 case "load"://Type R
-                case "load.d":
-                    rs = parts[1].replace(",", "");
-                    rt = parts[2];
+                case "load.v":
+                    rt = parts[1].replace(",", "");
+                    rs = parts[2];
                     file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
                                 +"000000000000");
                     binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
                                 +"000000000000";
                     break;
                 case "store":
-                case "store.d":
+                    rt = parts[2].replace(",", "");
+                    rs = parts[1];
+                    file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
+                                +"000000000000");
+                    binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
+                                +"000000000000";
+                 //   System.out.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
+                          //      +"000000000000");
+                    break;
+                case "store.v":
                     rs = parts[2].replace(",", "");
                     rt = parts[1];
                     file.println(getmNemonic(mnemonic)+getRegister(rs)+getRegister(rt)+"00000"
@@ -588,6 +603,11 @@ public class Ensamblador {
         String out="";
         if (immediate!=-1) {
             out=Integer.toBinaryString(immediate);
+            if (out.length()>=17) {
+              //  System.out.println("Viejo: "+ out);
+                out=out.substring(out.length()-17, out.length());
+               // System.out.println("Nuevo: "+out);
+            }
            // System.out.println(out.length());
             for (int i = out.length(); i < 17; i++) {
                 out="0"+out;
