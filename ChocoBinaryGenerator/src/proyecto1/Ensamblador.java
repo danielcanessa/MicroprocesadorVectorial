@@ -62,7 +62,7 @@ public class Ensamblador {
                 case "addi":
                 case "sub.v":
                 case "xor":
-                case "xor.v":               
+                case "xori.v":               
                 case "mov"://Type I               
                 case "movi"://Type I                
                 case "mov.v":                
@@ -140,7 +140,7 @@ public class Ensamblador {
         {
             return("10010");            
         } 
-        else if(mNemonic.contains("xor.v"))
+        else if(mNemonic.contains("xori.v"))
         {
             return("00110");            
         }
@@ -205,12 +205,8 @@ public class Ensamblador {
     public  String getRegister(String register)
     {
         if (register.contains("r0")) {
+          
             return("00000");
-            
-        }
-        else if(register.contains("r1"))
-        {
-            return("00001");
             
         }
         else if(register.contains("r2"))
@@ -283,16 +279,17 @@ public class Ensamblador {
             return("01111");
             
         }
+         else if(register.contains("r1"))
+        {
+            return("00001");
+            
+        }
         else if(register.contains("v0"))
         {
             return("10000");
             
         }
-        else if(register.contains("v1"))
-        {
-            return("10001");
-            
-        }
+       
         else if(register.contains("v2"))
         {
             return("10010");
@@ -363,6 +360,11 @@ public class Ensamblador {
             return("11111");
             
         }
+         else if(register.contains("v1"))
+        {
+            return("10001");
+            
+        }
         else 
         {
             return "hay algun error en la lectura de registros";
@@ -425,7 +427,7 @@ public class Ensamblador {
         int pcCounter=0;
        
         for(int i = 0; i < instructions.size(); i++){
-            String binaryCode="5'd"+i+ "  : data_out = {32'b";
+            String binaryCode="6'd"+i+ "  : data_out = {32'b";
            
             
             instruction = instructions.get(i);
@@ -445,7 +447,7 @@ public class Ensamblador {
                 case "addi":
                 case "sub.v":
                 case "xor":
-                case "xor.v":
+                case "xori.v":
                     if(instruction.contains("#")){//type I
                         rs = parts[1].replace(",", "");
                         rt = parts[2].replace(",", "");
@@ -478,6 +480,7 @@ public class Ensamblador {
                                // +"000000000000");
                     }
                     break;
+                 case "mov.v":
                 case "mov"://Type I
                     rd = parts[1].replace(",", "");
                     rs = parts[2].replace(",", "");
@@ -489,7 +492,7 @@ public class Ensamblador {
                                 +"000000000000";
                     break;
                 case "movi"://Type I                
-                case "mov.v":
+                
                     rt = parts[1].replace(",", "");
                     imm = parts[2].replace("#", "");
                     
