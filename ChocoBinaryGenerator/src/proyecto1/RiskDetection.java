@@ -20,7 +20,7 @@ public class RiskDetection {
 
         for (int i = 0; i < instructions.size(); i++) {
             instruction = instructions.get(i);
-            System.out.println("Instruccion: " + instruction);
+           // System.out.println("Instruccion: " + instruction);
             characters = getCharacters(instruction);//to get the array of characters (mnemonic, rd, rs, rt)
             instructionsCharacters.add(characters);
         }
@@ -36,7 +36,7 @@ public class RiskDetection {
         int nops = 0;
         boolean flag = false;
 
-        System.out.println("**************************** RISK DETECTION ***************************************");
+        //System.out.println("**************************** RISK DETECTION ***************************************");
         
         for (int i = 0; i < size; i++) {
             nops = 0;
@@ -47,7 +47,8 @@ public class RiskDetection {
             rsNext = "";
 
             characters = instructionsCharacters.get(i);
-            System.out.println("Characters: " + characters);
+           
+            //System.out.println("Characters: " + characters);
 
             mnemonic = characters.get(0);
             rsActual = characters.get(1);
@@ -59,20 +60,20 @@ public class RiskDetection {
 
             if (rsActual.contains("r") && mnemonic != "beq") {
                 if (i + 1 < size) {
-                    System.out.println("··········································································");
-                    System.out.println("mnemonicActual: " + mnemonic);
-                    System.out.println("rsActual: " + rsActual);
+                   // System.out.println("··········································································");
+                 //   System.out.println("mnemonicActual: " + mnemonic);
+                  //  System.out.println("rsActual: " + rsActual);
                     characters = instructionsCharacters.get(i + 1);
                     rsNext = characters.get(1);
                     rtNext = characters.get(2);
                     rdNext = characters.get(3);
 
-                    System.out.println("rsNext: " + rsNext);
-                    System.out.println("rtNext: " + rtNext);
-                    System.out.println("rdNext: " + rdNext);
+                 //   System.out.println("rsNext: " + rsNext);
+                //    System.out.println("rtNext: " + rtNext);
+                 //   System.out.println("rdNext: " + rdNext);
 
                     if (rsActual.equalsIgnoreCase(rsNext) || rsActual.equalsIgnoreCase(rtNext) || rsActual.equalsIgnoreCase(rdNext)) {
-                        System.out.println("Insertar 3 nops. Operando");
+               //         System.out.println("Insertar 3 nops. Operando");
                         if (nops < 3) {
                             nops = 3; //insert 3 nops
                         }
@@ -81,20 +82,20 @@ public class RiskDetection {
 
                 if (i + 2 < size) {
                     characters = instructionsCharacters.get(i + 2);
-                    System.out.println("··········································································");
-                    System.out.println("mnemonicActual: " + mnemonic);
-                    System.out.println("rsActual: " + rsActual);
+               //     System.out.println("··········································································");
+              //      System.out.println("mnemonicActual: " + mnemonic);
+              //      System.out.println("rsActual: " + rsActual);
 
                     rsNext = characters.get(1);
                     rtNext = characters.get(2);
                     rdNext = characters.get(3);
 
-                    System.out.println("rsNext: " + rsNext);
-                    System.out.println("rtNext: " + rtNext);
-                    System.out.println("rdNext: " + rdNext);
+             //       System.out.println("rsNext: " + rsNext);
+             //       System.out.println("rtNext: " + rtNext);
+             //       System.out.println("rdNext: " + rdNext);
 
                     if (rsActual.equalsIgnoreCase(rsNext) || rsActual.equalsIgnoreCase(rtNext) || rsActual.equalsIgnoreCase(rdNext)) {
-                        System.out.println("Insertar 2 nops. Operando");
+               //         System.out.println("Insertar 2 nops. Operando");
                         if (nops < 2) {
                             nops = 2; //insert 2 nops
                         }
@@ -103,19 +104,19 @@ public class RiskDetection {
 
                 if (i + 3 < size) {
                     characters = instructionsCharacters.get(i + 3);
-                    System.out.println("··········································································");
-                    System.out.println("mnemonicActual: " + mnemonic);
-                    System.out.println("rs: " + rsActual);
+             //       System.out.println("··········································································");
+            //        System.out.println("mnemonicActual: " + mnemonic);
+           //         System.out.println("rs: " + rsActual);
                     rsNext = characters.get(1);
                     rtNext = characters.get(2);
                     rdNext = characters.get(3);
 
-                    System.out.println("rsNext: " + rsNext);
-                    System.out.println("rtNext: " + rtNext);
-                    System.out.println("rdNext: " + rdNext);
+            //        System.out.println("rsNext: " + rsNext);
+            //        System.out.println("rtNext: " + rtNext);
+            //        System.out.println("rdNext: " + rdNext);
 
                     if (rsActual.equalsIgnoreCase(rsNext) || rsActual.equalsIgnoreCase(rtNext) || rsActual.equalsIgnoreCase(rdNext)) {
-                        System.out.println("Insertar 1 nops. Operando");
+             //           System.out.println("Insertar 1 nops. Operando");
                         if (nops < 1) {
                             nops = 1; //insert 1 nops
                         }
@@ -129,7 +130,7 @@ public class RiskDetection {
             instructionsCorrected.add(instructions.get(i));
             if (nops > 0) {
                 for (int j = 0; j < nops; j++) {
-                    System.out.println("Insercion de nops");
+            //        System.out.println("Insercion de nops");
                     instructionsCorrected.add("nop");
                 }
             }
@@ -196,9 +197,9 @@ public class RiskDetection {
                 break;
         }
 
-        System.out.println("rs: " + rs);
-        System.out.println("rt: " + rt);
-        System.out.println("rd: " + rd);
+        //System.out.println("rs: " + rs);
+        //System.out.println("rt: " + rt);
+        //System.out.println("rd: " + rd);
 
         characters.add(mnemonic);
         characters.add(rs);

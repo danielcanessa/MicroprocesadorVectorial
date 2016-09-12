@@ -37,7 +37,7 @@ public class Ensamblador {
 
         RiskDetection riskDetection = new RiskDetection();
         instructionsCorrected = riskDetection.principal(instructions);
-        ensamblador.printInstructions(instructionsCorrected);
+       // ensamblador.printInstructions(instructionsCorrected);
         System.out.println("---------------------------------------");
         ensamblador.fillLabels(hashTableLabels,instructionsCorrected);
         ensamblador.ensamblador(instructionsCorrected, file,hashTableLabels);
@@ -391,6 +391,9 @@ public class Ensamblador {
      
     public String getBinaryShamt(int n)
     {
+       // System.out.println("viejo shant: "+n);
+        n=n%8;
+      //  System.out.println("nuevo shamt: "+n);
         String binary=Integer.toBinaryString(n);
         String aux="";
         if (binary.length()<12) {
@@ -626,6 +629,7 @@ public class Ensamblador {
     public ArrayList<String> readFile() throws UnsupportedEncodingException, FileNotFoundException, IOException{
         String line;
         ArrayList<String> instructions = new ArrayList<String>();
+        
         File file = new File("instructions.txt");
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(new FileInputStream(file), "UTF8"));
