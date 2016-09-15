@@ -1,0 +1,5 @@
+8 bits
+./img prueba.bmp 8 32768 8 1
+32 bits
+./img prueba.bmp 32 8192 8 1
+

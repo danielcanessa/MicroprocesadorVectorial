@@ -1,0 +1,11 @@
+compilar
+g++ img2mif.cpp -o img
+8 bits
+./img prueba.bmp 8 32768 8 1
+32 bits
+./img prueba.bmp 32 8192 8 1
+
+
+
+En el de 8 bits hay que cambiar que en vez de que llegue 32768 a 32767
+En el de 32 bits hay que cambiar que en vez de que llegue a 8192 a 8191
