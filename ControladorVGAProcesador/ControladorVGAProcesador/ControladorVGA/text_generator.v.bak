@@ -1,0 +1,503 @@
+module generador_texto_pprincipal(
+	 input wire clk, reset,
+	 input wire [6:0] letra_presionada, //esta entrada manda el codigo de la letra presionada
+	 input wire presiono_teclado,  //esta entrada se encarga de indicar que una letra ha sido presionada
+    input wire [9:0] pixel_x, pixel_y, 
+	 input wire pinta_pantalla_principal,
+	 input wire archivo1, //esta entrada indica que se esta escribiendo en el archivo 1
+	 input wire archivo2, //esta entrada indica que se esta escribiendo en el archivo 2
+	 input wire archivo3, //esta entrada indica que se esta escribiendo en el archivo 3
+	 input wire [7:0] color, //contiene el color de cada una de las letras
+	 input wire [1:0] size, //indica el tamaño de la letra
+	 input wire mover_cursor, //esta entrada se encarga de indicar que se mueva el cursor
+	 input wire nuevo, //esta entrada se utiliza para escoger la memoria
+	 input wire nuevo_pantalla_principal, //esta entrada indica cuando se escoge nuevo desde la pprincipal
+    output reg [7:0] text_rgb,
+	 output wire text_on
+   );
+	
+	
+	//Nueva Declaracion de señales
+	wire[10:0] rom_addr, rom_addr2;
+	reg[6:0] char_addr, char_addr2,char_addr_encabezado,char_addr_opciones;
+	reg[3:0] row_addr, row_addr2;
+	wire [3:0] row_addr_encabezado, row_addr_opciones;
+	reg [2:0] bit_addr, bit_addr2;
+	wire [2:0] bit_addr_encabezado, bit_addr_opciones;
+	wire [7:0] font_word, font_word2;
+   wire font_bit, font_bit2, encabezado_on, opciones_on;
+	
+	
+	//Se definen los indicadores que se presionaron las flechas del teclado
+	wire flecha_arriba;
+	wire flecha_abajo;
+	wire flecha_derecha;
+	wire flecha_izquierda;
+	wire no_escribe_letra;
+	
+	
+	//En esta parte se declaran los registros que indican si se modifica el archivo1, archivo2, archivo3
+	reg seleccionArchivo1, seleccionArchivo2, seleccionArchivo3; 
+	
+	//Se define el registro que indica cual memoria utilizar
+	reg[1:0] escoge_memoria;
+	
+	//En esta parte se indica si se presiono las flechas
+	assign flecha_arriba = (letra_presionada == 7'h18) ? 1 : 0;
+	assign flecha_abajo = (letra_presionada == 7'h19) ? 1 : 0;
+	assign flecha_izquierda = (letra_presionada == 7'h1b) ? 1 : 0;
+	assign flecha_derecha = (letra_presionada == 7'h1a) ? 1 : 0;
+	assign no_escribe_letra = ((letra_presionada == 7'h06) || flecha_arriba || flecha_abajo 
+	|| flecha_izquierda || flecha_derecha || (letra_presionada == 7'h0b)) ? 1:0;
+
+   //Patron Memoria RAM (Queda igual)
+   wire we_primer_archivo; //cuando se presiona el boton para seleccionar X o O realiza la escritura en memoria
+	wire we_segundo_archivo;
+	wire we_tercer_archivo;
+   wire [11:0] addr_r, addr_w, addr_r2; //direccion de lectura y escritura
+   wire [14:0] din, dout_primer_archivo, dout_segundo_archivo; //datos de entrada y salida de la memoria
+	wire [14:0] dout_tercer_archivo; //datos de salida del tercer archivo
+	wire [14:0] dout, dout_prueba;
+	
+   //Mapa de un patron de 20x8: La pantalla va a tener 20 cuadros horizontales de 32 bits
+	//y de 64 bits de ancho
+   localparam MAX_X = 20;
+   localparam MAX_Y = 8;
+	
+	
+   // cursor
+   reg [17:0] cur_x_reg=18'b000010000100000011; //esto se encarga de iniciar el cursor x en el lugar que yo quiero
+	reg[17:0] cur_x_reg_prueba = 18'b000010000100000011;
+	reg[17:0] cur_x_reg_inicial = 18'b000010000100000011; // se agrega este registro para la hora de hacer un enter
+   wire [17:0] cur_x_next; //indica la nueva posicion del cursor en el eje x
+   reg [11:0] cur_y_reg=12'b010010001000; //esto se encarga de iniciar el cursor y en el valor que yo quiero
+	reg [11:0] cur_y_reg_prueba=12'b010010001000;
+   wire [11:0]cur_y_next; //indica la nueva posicion del cursor en el eje y
+   wire move_x_tick,move_x2_tick, move_y_tick, move_y2_tick, cursor_on; //indica cuando se presiona un boton
+	wire seleccionBoton; //boton que se encarga de la seleccion de X o O
+	
+	
+	
+   // Numero de pixeles retardados para evitar fallos
+   reg [9:0] pix_x1_reg, pix_y1_reg;
+   reg [9:0] pix_x2_reg, pix_y2_reg;
+	
+   //señales de salida
+   wire [7:0] font_rgb, font_rev_rgb; 
+	
+   //Se instancia la font ROM(Modulo que contiene la definicion de todas las letras)
+   font_rom font_unit
+      (.clk(clk), .addr(rom_addr), .data(font_word));
+		
+	font_rom font_unit2
+      (.clk(clk), .addr(rom_addr2), .data(font_word2));
+		
+   // Se instancia el dual-port video RAM (2^12-by-7): Aqui se instancia la memoria RAM del primer archivo
+   video_ram_sync
+      #(.ADDR_WIDTH(12), .DATA_WIDTH(15)) video_ram_primer_archivo
+      (.clk(clk), .we(we_primer_archivo), .addr_a(addr_w), .addr_b(addr_r), .addr_c(addr_r2),
+       .din_a(din), .dout_a(dout_prueba), .dout_b(dout_primer_archivo));
+		 
+	// Se instancia el dual-port video RAM (2^12-by-7): Aqui se instancia la memoria RAM del segundo archivo
+   video_ram_sync
+      #(.ADDR_WIDTH(12), .DATA_WIDTH(15)) video_ram_segundo_archivo
+      (.clk(clk), .we(we_segundo_archivo), .addr_a(addr_w), .addr_b(addr_r), .addr_c(addr_r2),
+       .din_a(din), .dout_a(), .dout_b(dout_segundo_archivo));
+		 
+	// Se instancia el dual-port video RAM (2^12-by-7): Aqui se instancia la memoria RAM del tercer archivo
+   video_ram_sync
+      #(.ADDR_WIDTH(12), .DATA_WIDTH(15)) video_ram_tercer_archivo
+      (.clk(clk), .we(we_tercer_archivo), .addr_a(addr_w), .addr_b(addr_r), .addr_c(addr_r2),
+       .din_a(din), .dout_a(), .dout_b(dout_tercer_archivo));
+		 
+	reg prueba1 = 1; //este registro se encarga de indicar cuando debe detenerse el cursor
+
+   //Registros
+   always @(posedge clk)
+		if (reset)
+         begin
+            cur_x_reg <= 18'b000010000100000011;
+            cur_y_reg <= 12'b010010001000;
+            pix_x1_reg <= 0;
+				pix_x2_reg <= 0;
+				pix_y1_reg <= 0;
+				pix_y2_reg <= 0;
+				
+         end
+      else
+
+			begin
+				cur_x_reg_prueba <= cur_x_reg; //se agrego esto para realizar el salto del cursor
+				cur_x_reg <= cur_x_next;
+				cur_y_reg_prueba <= cur_y_reg;
+				cur_y_reg <= cur_y_next;
+				pix_x1_reg <= pixel_x;
+				pix_x2_reg <= pix_x1_reg;
+				pix_y1_reg <= pixel_y;
+				pix_y2_reg <= pix_y1_reg;
+				
+				//-----------------------------------------------------------------------
+				// En esta parte se definen las condiciones para que el cursor se desplaze adecuadamente.
+				// Estas condiciones verifican que el cursor salte adecuadamente
+				//-----------------------------------------------------------------------
+				
+				if((size == 0 && (cur_x_reg[6:0] - cur_x_reg_prueba[6:0] == 1)) ||  (size == 1 && (cur_x_reg[12:7] - cur_x_reg_prueba[12:7] == 1))
+				|| (size == 2 && (cur_x_reg[17:13] - cur_x_reg_prueba[17:13] == 1)))
+				
+				begin
+					prueba1 <= 0;
+					cur_x_reg_prueba <= cur_x_reg;
+				end
+				
+				else if((size == 0 && (cur_x_reg_prueba[6:0]- cur_x_reg[6:0] == 1)) ||  (size == 1 && (cur_x_reg_prueba[12:7]-cur_x_reg[12:7] == 1))
+				|| (size == 2 && (cur_x_reg_prueba[17:13] - cur_x_reg[17:13] == 1)))
+				begin
+					prueba1 <= 0;
+					cur_x_reg_prueba <= cur_x_reg;
+				end
+				else if((size == 0 && (cur_y_reg[4:0] - cur_y_reg_prueba[4:0] == 1)) ||  (size == 1 && (cur_y_reg[8:5] - cur_y_reg_prueba[8:5] == 1))
+				|| (size == 2 && (cur_y_reg[11:9] - cur_y_reg_prueba[11:9] == 1)))
+				begin
+					prueba1 <= 0;
+					cur_y_reg_prueba <= cur_y_reg;
+				end
+				else if((size == 0 && (cur_y_reg_prueba[4:0] - cur_y_reg[4:0] == 1)) ||  (size == 1 && (cur_y_reg_prueba[8:5] - cur_y_reg[8:5] == 1))
+				|| (size == 2 && (cur_y_reg_prueba[11:9] - cur_y_reg[11:9] == 1)))
+				begin
+					prueba1 <= 0;
+					cur_y_reg_prueba <= cur_y_reg;
+				end
+				else if(presiono_teclado && (letra_presionada != 7'h06) && (letra_presionada != 7'h07)
+				&& (letra_presionada != 7'h0b)) //con la restriccion de la mayuscula
+				
+					prueba1 <= 1;	
+				else if(presiono_teclado && letra_presionada == 7'h0b && size == 0) //falta esta
+				begin
+					cur_y_reg <= cur_y_reg + 1;
+					cur_y_reg_prueba <= cur_y_reg;
+					cur_x_reg <= cur_x_reg_inicial;
+				end
+				else if(presiono_teclado && letra_presionada == 7'h0b && size == 1) //falta esta
+				begin
+					cur_y_reg <= cur_y_reg + 6'b100000;
+					cur_y_reg_prueba <= cur_y_reg;
+					cur_x_reg <= cur_x_reg_inicial;
+				end
+				else if(presiono_teclado && letra_presionada == 7'h0b && size == 2) //falta esta
+				begin
+					cur_y_reg <= cur_y_reg + 10'b1001000100;
+					cur_y_reg_prueba <= cur_y_reg;
+					cur_x_reg <= cur_x_reg_inicial;
+				end
+				else if(nuevo)
+				begin
+					cur_x_reg <= 18'b000010000100000011;
+					cur_y_reg <= 12'b010010001000;
+					escoge_memoria <= escoge_memoria + 1;
+					seleccionArchivo1 <= 1'b0;
+					seleccionArchivo2 <= 1'b0;
+					seleccionArchivo3 <= 1'b0;
+				end
+				else if(nuevo_pantalla_principal)
+				begin
+					cur_x_reg <= 18'b000010000100000011;
+					cur_y_reg <= 12'b010010001000;
+					escoge_memoria <= escoge_memoria + 1;
+					seleccionArchivo1 <= 1'b0;
+					seleccionArchivo2 <= 1'b0;
+					seleccionArchivo3 <= 1'b0;
+				end
+				else if(archivo1)
+				begin
+					seleccionArchivo1 <= 1'b1;
+					seleccionArchivo2 <= 1'b0;
+					seleccionArchivo3 <= 1'b0;
+				end
+				else if(archivo2)
+				begin
+					seleccionArchivo1 <= 1'b0;
+					seleccionArchivo2 <= 1'b1;
+					seleccionArchivo3 <= 1'b0;
+				end
+				else if(archivo3)
+				begin
+					seleccionArchivo1 <= 1'b0;
+					seleccionArchivo2 <= 1'b0;
+					seleccionArchivo3 <= 1'b1;
+				end
+			
+			end
+		
+   // tile RAM write: Aqui se encarga de escribir en el registro
+	assign addr_w = (size == 2) ? {cur_y_reg[11:9], cur_x_reg[17:13]} :
+						 (size == 1) ? {cur_y_reg[8:5], cur_x_reg[12:7]} : 
+						 (size == 0) ? {cur_y_reg[4:0], cur_x_reg[6:0]} : {cur_y_reg[4:0], cur_x_reg[6:0]}; 
+						
+	
+   assign din = (letra_presionada != 7'h07)? {letra_presionada,color}: 15'h0000; //codigo ascii de 7 bits que se guarda en la memoria
+	assign we_primer_archivo = (((escoge_memoria == 1 ) || seleccionArchivo1) && ((presiono_teclado && (~no_escribe_letra) && (letra_presionada != 7'h06)))) ? 1: 0;
+	assign we_segundo_archivo = (((escoge_memoria == 2 ) || seleccionArchivo2) && ((presiono_teclado && (~no_escribe_letra) && (letra_presionada != 7'h06)))) ? 1: 0;
+	assign we_tercer_archivo =  (((escoge_memoria == 3 ) || seleccionArchivo3) &&((presiono_teclado && (~no_escribe_letra) && (letra_presionada != 7'h06)))) ? 1: 0;
+ 
+	//Escoge los datos a pintar de la memoria
+	assign dout = ((escoge_memoria == 1) || seleccionArchivo1) ? dout_primer_archivo : 
+			((escoge_memoria == 2 ) || seleccionArchivo2) ? dout_segundo_archivo : 
+			((escoge_memoria == 3 ) || seleccionArchivo3) ? dout_tercer_archivo: 15'h0000;
+	
+ // tile RAM read: Se agarran los 3 bits mas significativos del pixel_y porque hay 8 cuadros verticales
+	//y entonces es 2^3, y se agarran los 4 bits más significativos del pixel_x porque hay
+	//16 cuadros horizontales y entonces es 2^4
+   // utiliza coordenadas sin retardo para formar el tile RAM address
+	assign addr_r = (size == 2) ? {pixel_y[8:6], pixel_x[9:5]} :
+						 (size == 1) ? {pixel_y[8:5], pixel_x[9:4]} :
+						 (size == 0) ? {pixel_y[8:4], pixel_x[9:3]} : {pixel_y[8:4], pixel_x[9:3]};
+
+	assign addr_r2 = {pixel_y[8:6], pixel_x[9:5]} ;
+//						 (size == 1) ? {pixel_y[8:5], pixel_x[9:4]} :
+//						 (size == 0) ? {pixel_y[8:4], pixel_x[9:3]} : {pixel_y[8:4], pixel_x[9:3]};
+	
+	//-----------------------------------------------------------------------
+   // En esta parte se define el cursor para una letra de 32 x 64 bits.
+   //  - Se utilizan los siguientes wires:.
+   //  - flechas, mover_cursor, letra_presionada, cur_x_reg, cur_x_reg_prueba.
+   //-----------------------------------------------------------------------
+	assign cur_x_next =
+      ((flecha_derecha || mover_cursor) && (cur_x_reg==MAX_X-1)) ? 0 : //wrap
+      (((mover_cursor || flecha_derecha) && prueba1 &&(letra_presionada != 7'h07) &&(letra_presionada != 7'h06) && (((cur_x_reg+1) - cur_x_reg_prueba) == 1))) ? cur_x_reg + 1 : 
+		(((flecha_izquierda) && prueba1 &&(letra_presionada != 7'h07) &&(letra_presionada != 7'h06) && ((cur_x_reg_prueba - (cur_x_reg-1) ) == 1)))? cur_x_reg-1: cur_x_reg;
+   
+	assign cur_y_next =
+      ((flecha_abajo) && (cur_y_reg==MAX_Y)) ? 0 : //wrap
+      (((flecha_abajo) && prueba1 &&(letra_presionada != 7'h06) && (((cur_y_reg+1) - cur_y_reg_prueba) == 1))) ?  cur_y_reg + 1 : 
+		(((flecha_arriba) && prueba1 &&(letra_presionada != 7'h06) && ((cur_y_reg_prueba - (cur_y_reg-1) ) == 1)))? cur_y_reg-1: cur_y_reg;
+   
+	//----------------------------------------------------------------------
+		
+   //Se asigna el color de las X o O, además del color de las casillas ganadoras
+   //Las casillas ganadoras se pintan de color verde y las marcas X o O de color blanco
+   assign font_rgb = (font_bit) ? dout[7:0] : 8'b00000000 ;
+   assign font_rev_rgb = (font_bit) ? 8'b00000000 : 8'b00011111;
+	
+   // Utiliza coordenadas con retraso para realizar la comparacion
+	//cursor_on se pinta de color verde si el cursor se encuentra dentro de un cuadro de 32x64
+  // assign cursor_on = pinta_pantalla_principal && ((pix_y2_reg[8:6]==cur_y_reg) &&
+  //                    (pix_x2_reg[9:5]==cur_x_reg));
+							 
+	assign cursor_on = (pinta_pantalla_principal && (size == 2) && ((pix_y2_reg[8:6]==cur_y_reg[11:9]) && (pix_x2_reg[9:5]==cur_x_reg[17:13]))) ? 1 : 
+	(pinta_pantalla_principal && (size == 1) && ((pix_y2_reg[8:5]==cur_y_reg[8:5]) && (pix_x2_reg[9:4]==cur_x_reg[12:7]))) ? 1 :
+	(pinta_pantalla_principal && (size == 0) && ((pix_y2_reg[8:4]==cur_y_reg[4:0]) && (pix_x2_reg[9:3]==cur_x_reg[6:0]))) ? 1 : 0;
+   
+
+	//-------------------------------------------
+   // Region superior de la pantalla
+   //  - Muestra el encabezado del procesador de texto.
+   //  - Escalado con 16x32 bits.
+   //  - Linea 1,  chars: "DEMO WORD   *Aa"
+   //-------------------------------------------
+   assign encabezado_on = pinta_pantalla_principal && ((pixel_y[9:5]==1) && (pixel_x[9:4]<38));
+   assign row_addr_encabezado = pixel_y[4:1];
+   assign bit_addr_encabezado = pixel_x[3:1];
+   always @*
+      case (pixel_x[9:4])
+			6'b000000: char_addr_encabezado = 7'h00; // 
+			6'b000001: char_addr_encabezado = 7'h00; // 
+			6'b000010: char_addr_encabezado = 7'h03; // Imagen Archivo Nuevo
+			6'b000011: char_addr_encabezado = 7'h00; // 
+			6'b000100: char_addr_encabezado = 7'h00; // 
+			6'b000101: char_addr_encabezado = 7'h00; // 
+			6'b000110: char_addr_encabezado = 7'h00; // Imagen Archivo Guardar
+			6'b000111: char_addr_encabezado = 7'h04; //
+			6'b001000: char_addr_encabezado = 7'h00; // 
+			6'b001001: char_addr_encabezado = 7'h00; //
+			6'b001010: char_addr_encabezado = 7'h00; // Imagen X Cerrar
+			6'b001011: char_addr_encabezado = 7'h00; // 
+         6'b001100: char_addr_encabezado = 7'h09; // 
+         6'b001101: char_addr_encabezado = 7'h00; // 
+         6'b001110: char_addr_encabezado = 7'h00; // 
+         6'b001111: char_addr_encabezado = 7'h00; // 
+         6'b010000: char_addr_encabezado = 7'h44; // D
+         6'b010001: char_addr_encabezado = 7'h45; // E
+         6'b010010: char_addr_encabezado = 7'h4d; // M
+         6'b010011: char_addr_encabezado = 7'h4f; // O
+			6'b010100: char_addr_encabezado = 7'h00; // 
+			6'b010101: char_addr_encabezado = 7'h57; // W	
+			6'b010110: char_addr_encabezado = 7'h4f; // O
+			6'b010111: char_addr_encabezado = 7'h52; // R
+			6'b011000: char_addr_encabezado = 7'h44; // D
+			6'b011001: char_addr_encabezado = 7'h00; //
+			6'b011010: char_addr_encabezado = 7'h00; // 
+			6'b011011: char_addr_encabezado = 7'h41; // 
+			6'b011100: char_addr_encabezado = 7'h61; // 
+			6'b011101: char_addr_encabezado = 7'h00; // A
+			6'b011110: char_addr_encabezado = 7'h00; // a
+			6'b011111: char_addr_encabezado = 7'h08; // 
+			6'b100000: char_addr_encabezado = 7'h00; //
+			6'b100001: char_addr_encabezado = 7'h00; 
+			6'b100010: char_addr_encabezado = 7'h00; //Imagen del color
+			6'b100011: char_addr_encabezado = 7'h00; 
+			6'b100100: char_addr_encabezado = 7'h08; 
+			6'b100101: char_addr_encabezado = 7'h00; 
+			6'b100110: char_addr_encabezado = 7'h00; // Imagen del tamaño
+			6'b100111: char_addr_encabezado = 7'h00; 
+         default: char_addr_encabezado = 7'h00; //
+      endcase
+   //-------------------------------------------
+	
+	//-------------------------------------------
+   // Region superior de la pantalla
+   //  - Muestra la imagen del archivo nuevo.
+   //  - Escalado con 8x16 bits.
+   //  - Linea 1, 8 chars: "nuevo    guardar    cerrar    color    tamaño"
+   //-------------------------------------------
+   assign opciones_on = pinta_pantalla_principal && ((pixel_y[9:4]==4) && (pixel_x[9:3]>1 && pixel_x[9:3]<76));
+   assign row_addr_opciones = pixel_y[3:0];
+   assign bit_addr_opciones = pixel_x[2:0];
+   always @*
+      case (pixel_x[9:3])
+
+         7'b0000011: char_addr_opciones = 7'h6e; //  n
+         7'b0000100: char_addr_opciones = 7'h75; //  u
+         7'b0000101: char_addr_opciones = 7'h65; //  e
+         7'b0000110: char_addr_opciones = 7'h76; //  v
+			7'b0000111: char_addr_opciones = 7'h6f; //  o
+			
+			7'b0001100: char_addr_opciones = 7'h67; //   g
+			7'b0001101: char_addr_opciones = 7'h75; //   u
+			7'b0001110: char_addr_opciones = 7'h61; //   a 
+			7'b0001111: char_addr_opciones = 7'h72; //   r
+			7'b0010000: char_addr_opciones = 7'h64; //   d
+			7'b0010001: char_addr_opciones = 7'h61; //   a
+			7'b0010010: char_addr_opciones = 7'h72; //   r
+			  
+			7'b0010111: char_addr_opciones = 7'h63; //   c
+			7'b0011000: char_addr_opciones = 7'h65; //   e
+			7'b0011001: char_addr_opciones = 7'h72; //   r
+			7'b0011010: char_addr_opciones = 7'h72; //   r
+			7'b0011011: char_addr_opciones = 7'h61; //   a
+			7'b0011100: char_addr_opciones = 7'h72; //   r
+			
+			7'b0111101: char_addr_opciones = 7'h63; //  c
+			7'b0111110: char_addr_opciones = 7'h6f; //  o
+			7'b0111111: char_addr_opciones = 7'h6c; //  l
+			7'b1000000: char_addr_opciones = 7'h6f; //  o
+			7'b1000001: char_addr_opciones = 7'h72; //  r
+			
+
+			7'b1000110: char_addr_opciones = 7'h74; //   t
+			7'b1000111: char_addr_opciones = 7'h61; //   a
+			7'b1001000: char_addr_opciones = 7'h6d; //   m
+			7'b1001001: char_addr_opciones = 7'h61; //   a
+			7'b1001010: char_addr_opciones = 7'h05; //   ñ
+			7'b1001011: char_addr_opciones = 7'h6f; //   o
+			
+         default: char_addr_opciones = 7'h00; //
+      endcase
+   //-------------------------------------------
+	
+				
+	//-------------------------------------------------------------------------------
+   // Circuito del MUX para las direcciones de la font ROM addresses y la salida rgb
+   //-------------------------------------------------------------------------------
+   always @*
+   begin
+      text_rgb = 8'b00000000;  //fondo de la pantalla negro
+      if (encabezado_on)
+         begin
+            char_addr = char_addr_encabezado;
+            row_addr = row_addr_encabezado;
+            bit_addr = bit_addr_encabezado;
+				
+            if (font_bit)
+					text_rgb = 8'b11111111;
+				else 
+				begin
+					if ((char_addr_encabezado == 7'h08))
+						text_rgb = color;
+					else
+						text_rgb = 8'b00000000;
+				end
+				
+         end
+		else if (opciones_on)
+         begin
+            char_addr = char_addr_opciones;
+            row_addr = row_addr_opciones;
+            bit_addr = bit_addr_opciones;
+            if (font_bit)
+					text_rgb = 8'b11111111;
+         end
+		else if (cursor_on) //cursor
+			begin
+				char_addr = dout[14:8];
+            
+            text_rgb = font_rev_rgb;
+				if(size == 0)
+				begin
+				row_addr  = (pixel_y[3:0]);
+            bit_addr = pix_x2_reg[2:0];
+				end
+				else if(size == 1)
+				begin
+				row_addr  = (pixel_y[4:1]);
+            bit_addr = pix_x2_reg[3:1];
+				end
+				else
+				begin
+				row_addr  = (pixel_y[5:2]);
+            bit_addr = pix_x2_reg[4:2];
+				end
+			end
+
+      else //Escribe las letras : X o O
+         begin
+            char_addr = dout[14:8];   //puedo revisar aqui que la casilla concuerde con la casilla ganadora
+				char_addr2 = dout_prueba[14:8];
+            if(size == 0)
+				begin
+				row_addr  = (pixel_y[3:0]);
+            bit_addr = pix_x2_reg[2:0];
+				row_addr2  = (pixel_y[5:2]);
+            bit_addr2 = pix_x2_reg[4:2];
+				if (font_bit)
+					text_rgb = font_rgb;
+				else if(font_bit2)
+					text_rgb = dout_prueba[7:0];
+				end
+				else if(size == 1)
+				begin
+				row_addr  = (pixel_y[4:1]);
+            bit_addr = pix_x2_reg[3:1];
+				row_addr2  = (pixel_y[5:2]);
+            bit_addr2 = pix_x2_reg[4:2];
+				if (font_bit)
+					text_rgb = font_rgb;
+				else if(font_bit2)
+					text_rgb = dout_prueba[7:0];
+				end
+				else
+				begin
+				row_addr  = (pixel_y[5:2]);
+            bit_addr = pix_x2_reg[4:2];
+				if (font_bit)
+					text_rgb = font_rgb;
+				else if(font_bit2)
+					text_rgb = dout_prueba[7:0];
+				end
+				
+         end
+   end
+	
+	//esto se encarga de indicar que el pixel que se está pintando corresponde a texto
+	assign text_on = encabezado_on | cursor_on | move_x_tick | move_x2_tick | move_y_tick 
+	|move_y2_tick | font_bit | font_bit2 | opciones_on;
+   
+	//-------------------------------------------
+   // Interfaz con la Font_ROM
+   //-------------------------------------------
+   assign rom_addr = {char_addr, row_addr};
+	assign rom_addr2 = {char_addr2, row_addr2};
+   assign font_bit = font_word[~bit_addr];
+	assign font_bit2 = font_word2[~bit_addr2];
+	
+	
+endmodule

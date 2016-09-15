@@ -1,0 +1,125 @@
+------------------------------------------------------------
+TimeQuest Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow 1200mV 85C Model Setup 'inst1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -9.694
+TNS   : -782.922
+
+Type  : Slow 1200mV 85C Model Setup 'background:inst|vga_adapter:VGA|vga_controller:controller|xCounter[3]'
+Slack : -6.129
+TNS   : -65.943
+
+Type  : Slow 1200mV 85C Model Setup 'inst1|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 11.069
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'background:inst|vga_adapter:VGA|vga_controller:controller|xCounter[3]'
+Slack : -0.430
+TNS   : -0.690
+
+Type  : Slow 1200mV 85C Model Hold 'inst1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 0.374
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'inst1|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.398
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'background:inst|vga_adapter:VGA|vga_controller:controller|xCounter[3]'
+Slack : 0.262
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'inst1|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 9.490
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'CLOCK_50'
+Slack : 9.891
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'inst1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 19.622
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'inst1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -8.700
+TNS   : -697.204
+
+Type  : Slow 1200mV 0C Model Setup 'background:inst|vga_adapter:VGA|vga_controller:controller|xCounter[3]'
+Slack : -6.007
+TNS   : -64.810
+
+Type  : Slow 1200mV 0C Model Setup 'inst1|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 11.834
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'background:inst|vga_adapter:VGA|vga_controller:controller|xCounter[3]'
+Slack : -0.311
+TNS   : -0.461
+
+Type  : Slow 1200mV 0C Model Hold 'inst1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 0.327
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'inst1|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.356
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'background:inst|vga_adapter:VGA|vga_controller:controller|xCounter[3]'
+Slack : 0.271
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'inst1|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 9.478
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
+Slack : 9.911
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'inst1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 19.617
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'inst1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -4.734
+TNS   : -377.565
+
+Type  : Fast 1200mV 0C Model Setup 'background:inst|vga_adapter:VGA|vga_controller:controller|xCounter[3]'
+Slack : -2.913
+TNS   : -31.133
+
+Type  : Fast 1200mV 0C Model Setup 'inst1|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 15.267
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'background:inst|vga_adapter:VGA|vga_controller:controller|xCounter[3]'
+Slack : -0.447
+TNS   : -1.172
+
+Type  : Fast 1200mV 0C Model Hold 'inst1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 0.165
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'inst1|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.182
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'background:inst|vga_adapter:VGA|vga_controller:controller|xCounter[3]'
+Slack : 0.346
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
+Slack : 9.621
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'inst1|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 9.728
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'inst1|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 19.728
+TNS   : 0.000
+
+------------------------------------------------------------

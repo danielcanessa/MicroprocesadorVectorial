@@ -1,0 +1,18 @@
+Analysis & Synthesis Status : Successful - Wed Sep 14 14:18:55 2016
+Quartus Prime Version : 16.0.0 Build 211 04/27/2016 SJ Lite Edition
+Revision Name : ControladorVGA
+Top-level Entity Name : ControladorVGA
+Family : Cyclone IV GX
+Total logic elements : 1,432
+    Total combinational functions : 1,425
+    Dedicated logic registers : 51
+Total registers : 51
+Total pins : 40
+Total virtual pins : 0
+Total memory bits : 614,400
+Embedded Multiplier 9-bit elements : 2
+Total GXB Receiver Channel PCS : 0
+Total GXB Receiver Channel PMA : 0
+Total GXB Transmitter Channel PCS : 0
+Total GXB Transmitter Channel PMA : 0
+Total PLLs : 1
