@@ -1,0 +1,54 @@
+movi r5, #0 
+movi r6, #5624
+movi r1, #0
+movi r2, #5625 
+movi r7, #0 
+movi r8, #0
+loop
+beq r5, r6, desencriptar
+nop
+load.v v9, r1
+nop 
+nop
+nop
+xori.v v5, v9, #200
+nop 
+nop
+nop
+store.v v5, r2
+nop
+nop
+nop
+addi r1, r1, #1
+addi r2, r2, #1
+addi r5, r5, #1
+nop
+nop
+beq r7, r8, loop 
+desencriptar
+movi r10, #0 
+movi r11, #5624
+movi r12, #5625
+movi r13, #11250
+loopDesencriptar
+beq r10, r11, done
+nop
+load.v v10, r12
+nop 
+nop
+nop
+xori.v v11, v10, #200
+nop 
+nop
+nop
+store.v v11, r13
+nop
+nop
+nop
+addi r12, r12, #1
+addi r13, r13, #1
+addi r10, r10, #1
+nop
+nop
+beq r7, r8, loopDesencriptar 
+done

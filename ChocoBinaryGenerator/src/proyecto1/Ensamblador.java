@@ -78,7 +78,7 @@ public class Ensamblador {
                 case "nop":
                     break;
                 default: 
-                       // System.out.println(pcCounter+" "+instruction);
+                        System.out.println(pcCounter+" "+instruction);
                         List<String> aux = new ArrayList<>();
                         aux.add(instruction);
                         aux.add(Integer.toString(pcCounter));
@@ -483,7 +483,7 @@ public class Ensamblador {
                                // +"000000000000");
                     }
                     break;
-                 case "mov.v":
+                 
                 case "mov"://Type I
                     rd = parts[1].replace(",", "");
                     rs = parts[2].replace(",", "");
@@ -494,6 +494,7 @@ public class Ensamblador {
                     binaryCode=binaryCode+getmNemonic(mnemonic)+getRegister(rs)+getRegister(rs)+getRegister(rd)
                                 +"000000000000";
                     break;
+                case "mov.v":
                 case "movi"://Type I                
                 
                     rt = parts[1].replace(",", "");

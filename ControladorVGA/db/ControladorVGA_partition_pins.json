@@ -138,10 +138,6 @@
 				{
 					"name" : "VGA_R[0]",
 					"strict" : false
-				},
-				{
-					"name" : "switch",
-					"strict" : false
 				}
 			]
 		}

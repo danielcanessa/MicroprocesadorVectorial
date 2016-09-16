@@ -4,7 +4,7 @@ editor if you plan to continue editing the block that represents it in
 the Block Editor! File corruption is VERY likely to occur.
 */
 /*
-Copyright (C) 1991-2016 Altera Corporation. All rights reserved.
+Copyright (C) 1991-2015 Altera Corporation. All rights reserved.
 Your use of Altera Corporation's design tools, logic functions 
 and other software and tools, and its AMPP partner logic 
 functions, and any output files from any of the foregoing 
@@ -21,7 +21,7 @@ agreement for further details.
 */
 (header "symbol" (version "1.1"))
 (symbol
-	(rect 16 16 272 224)
+	(rect 16 16 232 224)
 	(text "background" (rect 5 0 51 12)(font "Arial" ))
 	(text "inst" (rect 8 192 20 204)(font "Arial" ))
 	(port
@@ -41,81 +41,81 @@ agreement for further details.
 	(port
 		(pt 0 64)
 		(input)
-		(text "VGA_DATAIN[31..0]" (rect 0 0 92 12)(font "Arial" ))
-		(text "VGA_DATAIN[31..0]" (rect 21 59 113 71)(font "Arial" ))
-		(line (pt 0 64)(pt 16 64)(line_width 3))
+		(text "CLOCK_10" (rect 0 0 48 12)(font "Arial" ))
+		(text "CLOCK_10" (rect 21 59 69 71)(font "Arial" ))
+		(line (pt 0 64)(pt 16 64)(line_width 1))
 	)
 	(port
 		(pt 0 80)
 		(input)
-		(text "write_data" (rect 0 0 40 12)(font "Arial" ))
-		(text "write_data" (rect 21 75 61 87)(font "Arial" ))
+		(text "switch" (rect 0 0 23 12)(font "Arial" ))
+		(text "switch" (rect 21 75 44 87)(font "Arial" ))
 		(line (pt 0 80)(pt 16 80)(line_width 1))
 	)
 	(port
-		(pt 256 32)
+		(pt 216 32)
 		(output)
 		(text "VGA_CLK" (rect 0 0 49 12)(font "Arial" ))
-		(text "VGA_CLK" (rect 186 27 235 39)(font "Arial" ))
-		(line (pt 256 32)(pt 240 32)(line_width 1))
+		(text "VGA_CLK" (rect 146 27 195 39)(font "Arial" ))
+		(line (pt 216 32)(pt 200 32)(line_width 1))
 	)
 	(port
-		(pt 256 48)
+		(pt 216 48)
 		(output)
 		(text "VGA_HS" (rect 0 0 42 12)(font "Arial" ))
-		(text "VGA_HS" (rect 193 43 235 55)(font "Arial" ))
-		(line (pt 256 48)(pt 240 48)(line_width 1))
+		(text "VGA_HS" (rect 153 43 195 55)(font "Arial" ))
+		(line (pt 216 48)(pt 200 48)(line_width 1))
 	)
 	(port
-		(pt 256 64)
+		(pt 216 64)
 		(output)
 		(text "VGA_VS" (rect 0 0 43 12)(font "Arial" ))
-		(text "VGA_VS" (rect 192 59 235 71)(font "Arial" ))
-		(line (pt 256 64)(pt 240 64)(line_width 1))
+		(text "VGA_VS" (rect 152 59 195 71)(font "Arial" ))
+		(line (pt 216 64)(pt 200 64)(line_width 1))
 	)
 	(port
-		(pt 256 80)
+		(pt 216 80)
 		(output)
 		(text "VGA_BLANK" (rect 0 0 63 12)(font "Arial" ))
-		(text "VGA_BLANK" (rect 172 75 235 87)(font "Arial" ))
-		(line (pt 256 80)(pt 240 80)(line_width 1))
+		(text "VGA_BLANK" (rect 132 75 195 87)(font "Arial" ))
+		(line (pt 216 80)(pt 200 80)(line_width 1))
 	)
 	(port
-		(pt 256 96)
+		(pt 216 96)
 		(output)
 		(text "VGA_SYNC" (rect 0 0 56 12)(font "Arial" ))
-		(text "VGA_SYNC" (rect 179 91 235 103)(font "Arial" ))
-		(line (pt 256 96)(pt 240 96)(line_width 1))
+		(text "VGA_SYNC" (rect 139 91 195 103)(font "Arial" ))
+		(line (pt 216 96)(pt 200 96)(line_width 1))
 	)
 	(port
-		(pt 256 112)
+		(pt 216 112)
 		(output)
 		(text "VGA_R[9..0]" (rect 0 0 57 12)(font "Arial" ))
-		(text "VGA_R[9..0]" (rect 178 107 235 119)(font "Arial" ))
-		(line (pt 256 112)(pt 240 112)(line_width 3))
+		(text "VGA_R[9..0]" (rect 138 107 195 119)(font "Arial" ))
+		(line (pt 216 112)(pt 200 112)(line_width 3))
 	)
 	(port
-		(pt 256 128)
+		(pt 216 128)
 		(output)
 		(text "VGA_G[9..0]" (rect 0 0 56 12)(font "Arial" ))
-		(text "VGA_G[9..0]" (rect 179 123 235 135)(font "Arial" ))
-		(line (pt 256 128)(pt 240 128)(line_width 3))
+		(text "VGA_G[9..0]" (rect 139 123 195 135)(font "Arial" ))
+		(line (pt 216 128)(pt 200 128)(line_width 3))
 	)
 	(port
-		(pt 256 144)
+		(pt 216 144)
 		(output)
 		(text "VGA_B[9..0]" (rect 0 0 55 12)(font "Arial" ))
-		(text "VGA_B[9..0]" (rect 180 139 235 151)(font "Arial" ))
-		(line (pt 256 144)(pt 240 144)(line_width 3))
+		(text "VGA_B[9..0]" (rect 140 139 195 151)(font "Arial" ))
+		(line (pt 216 144)(pt 200 144)(line_width 3))
 	)
 	(port
-		(pt 256 160)
+		(pt 216 160)
 		(output)
 		(text "led" (rect 0 0 10 12)(font "Arial" ))
-		(text "led" (rect 225 155 235 167)(font "Arial" ))
-		(line (pt 256 160)(pt 240 160)(line_width 1))
+		(text "led" (rect 185 155 195 167)(font "Arial" ))
+		(line (pt 216 160)(pt 200 160)(line_width 1))
 	)
 	(drawing
-		(rectangle (rect 16 16 240 192)(line_width 1))
+		(rectangle (rect 16 16 200 192)(line_width 1))
 	)
 )

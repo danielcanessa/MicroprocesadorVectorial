@@ -58,7 +58,7 @@ public class RiskDetection {
             System.out.println("rd: " + rd);
              */
 
-            if (rsActual.contains("r") && mnemonic != "beq") {
+            if ((rsActual.contains("r") || rsActual.contains("v")) && mnemonic != "beq") {
                 if (i + 1 < size) {
                    // System.out.println("··········································································");
                  //   System.out.println("mnemonicActual: " + mnemonic);
@@ -95,7 +95,8 @@ public class RiskDetection {
              //       System.out.println("rdNext: " + rdNext);
 
                     if (rsActual.equalsIgnoreCase(rsNext) || rsActual.equalsIgnoreCase(rtNext) || rsActual.equalsIgnoreCase(rdNext)) {
-               //         System.out.println("Insertar 2 nops. Operando");
+               //
+ System.out.println("Insertar 2 nops. Operando");
                         if (nops < 2) {
                             nops = 2; //insert 2 nops
                         }
@@ -148,59 +149,29 @@ public class RiskDetection {
         //System.out.println("instruccion " + instruction);
         parts = instruction.split(" ");
         mnemonic = parts[0];
-        switch (mnemonic) {
-            case "add"://Type I or R
-            case "add.v":
-            case "addi":
-            case "sub.v":
-            case "xor":
-            case "xor.v":
-                if (instruction.contains("#")) {//type I
-                    rs = parts[1].replace(",", "");
-                    rt = parts[2].replace(",", "");
-                } else {//type R
-                    rs = parts[1].replace(",", "");
-                    rt = parts[2].replace(",", "");
-                    rd = parts[3];
-                }
-                break;
-            case "mov"://Type I
-                rs = parts[1].replace(",", "");
-                rt = parts[2].replace(",", "");
-                break;
-            case "movi"://Type I                
-            case "mov.v":
-                rs = parts[1].replace(",", "");
-                break;
-            case "ror.v"://Type I
-            case "rol.v":
-            case "lsl.v":
-            case "lsr.v":
-                rs = parts[1].replace(",", "");
-                rt = parts[2].replace(",", "");
-                break;
-            case "beq"://Type B
-                rs = parts[1].replace(",", "");
-                rt = parts[2].replace(",", "");
-                break;
-            case "load"://Type R
-            case "load.v":
-                rs = parts[1].replace(",", "");
-                rt = parts[2];
-                break;
-            case "store":
-            case "store.v":
-                rs = parts[2].replace(",", "");
-                rt = parts[1];
-                break;
-            default:
-                break;
+        
+        if(parts.length == 2){
+            rs = parts[1].replace(",", "");
+        }else if(parts.length == 3){
+            rs = parts[1].replace(",", "");
+            rt = parts[2].replace(",", "");
+        }else if (parts.length == 4){
+            rs = parts[1].replace(",", "");
+            rt = parts[2].replace(",", "");
+            rd = parts[3].replace(",", "");
         }
-
-        //System.out.println("rs: " + rs);
-        //System.out.println("rt: " + rt);
-        //System.out.println("rd: " + rd);
-
+        
+        if(mnemonic.contains("store")){//porque el destino esta al reves
+            rs = parts[2].replace(",", "");
+            rt = parts[1].replace(",", "");
+        }
+        /*
+        System.out.println("ççççççççççççççççççççççççççççççççççççççççç");
+        System.out.println("Instruccion " + instruction);
+        System.out.println("rs: " + rs);
+        System.out.println("rt: " + rt);
+        System.out.println("rd: " + rd);
+*/
         characters.add(mnemonic);
         characters.add(rs);
         characters.add(rt);

@@ -13,21 +13,21 @@ module criptography(data_memory, vga_datain, memory_address, dataTransfer, write
 	always @(*)
 	begin
 		
-		if(dataTransfer == 1'b1) begin
-			writeData = 1'b1;
-		end
-		else
-		begin
-			writeData = 1'b0;
-		end
-//		if(dataTransfer == 1'b1 && contador_direccion < 16'h41eb) begin
-//			memory_address = contador_direccion;
-//			contador_direccion = contador_direccion + 1;
+//		if(dataTransfer == 1'b1) begin
 //			writeData = 1'b1;
 //		end
-//		else begin
+//		else
+//		begin
 //			writeData = 1'b0;
 //		end
+		if(dataTransfer == 1'b1) begin
+			memory_address = contador_direccion;
+			contador_direccion = contador_direccion + 1;
+			writeData = 1'b1;
+		end
+		else begin
+			writeData = 1'b0;
+		end
 //		//contador_direccion = contador_direccion + 1;
 	end
 	

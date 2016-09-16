@@ -79,7 +79,9 @@ module vga_adapter(
 			resetn,
 			clock,
 			clock25,
-			colour,
+			clock10,
+		//	colour,
+			colourVGA, //color que pinta el vga
 			x, y, plot,
 			/* Signals for the DAC to drive the monitor. */
 			VGA_R,
@@ -93,7 +95,9 @@ module vga_adapter(
 			x_coordinate,
 			y_coordinate,
 			image_on,
-			write_coordinate);
+			write_coordinate,
+			read_address,
+			vga_read_address);
  
 	parameter BITS_PER_COLOUR_CHANNEL = 1;
 	/* The number of bits per colour channel used to represent the colour of each pixel. A value
@@ -127,11 +131,12 @@ module vga_adapter(
 	input resetn;
 	input clock;
 	input clock25;
+	input clock10;
 	
 	/* The colour input can be either 1 bit or 3*BITS_PER_COLOUR_CHANNEL bits wide, depending on
 	 * the setting of the MONOCHROME parameter.
 	 */
-	input [31:0] colour;
+	input [31:0] colourVGA;
 	
 	/* Specify the number of bits required to represent an (X,Y) coordinate on the screen for
 	 * a given resolution.
@@ -154,6 +159,8 @@ module vga_adapter(
 	 */
 	input plot;
 	
+	input [16:0] read_address;
+	
 	/* These outputs drive the VGA display. The VGA_CLK is also used to clock the FSM responsible for
 	 * controlling the data transferred to the DAC driving the monitor. */
 	output [9:0] VGA_R;
@@ -167,13 +174,12 @@ module vga_adapter(
 	output [9:0] x_coordinate; 
 	output [8:0] y_coordinate;
 	output image_on;
+	output [16:0] vga_read_address;
 
 	/*****************************************************************************/
 	/* Declare local signals here.                                               */
 	/*****************************************************************************/
-	
-	wire valid_160x120;
-	wire valid_320x240;
+
 	/* Set to 1 if the specified coordinates are in a valid range for a given resolution.*/
 	
 	wire writeEn;
@@ -183,7 +189,7 @@ module vga_adapter(
 	 */
 	
 //	wire [((MONOCHROME == "TRUE") ? (0) : (BITS_PER_COLOUR_CHANNEL*3-1)):0] to_ctrl_colour; Lo comente
-wire [7:0] to_ctrl_colour;
+wire [31:0] to_ctrl_colour;
 	/* Pixel colour read by the VGA controller */
 	
 //	wire [((RESOLUTION == "320x240") ? (16) : (14)):0] user_to_video_memory_addr; La comente mientras
@@ -213,8 +219,6 @@ wire [7:0] to_ctrl_colour;
 	
 	wire vcc, gnd;
 	
-	wire [2:0] Colour;
-	
 	
 	wire image_on_vga_adapter;
 	
@@ -229,59 +233,54 @@ wire [7:0] to_ctrl_colour;
 	
 	/*****************************************************************************/
 	/* Instances of modules for the VGA adapter.                                 */
-	/*****************************************************************************/	
-	assign vcc = 1'b1;
-	assign gnd = 1'b0;
-	
-	vga_address_translator user_input_translator(
-					.x(x), .y(y), .mem_address(user_to_video_memory_addr), .colour(Colour), 
-					.image_on(image_on_vga_adapter));
-		defparam user_input_translator.RESOLUTION = RESOLUTION;
-	/* Convert user coordinates into a memory address. */
-
-	assign valid_160x120 = (({1'b0, x} >= 0) & ({1'b0, x} < 160) & ({1'b0, y} >= 0) & ({1'b0, y} < 120)) & (RESOLUTION == "160x120");
-	assign valid_320x240 = (({1'b0, x} >= 0) & ({1'b0, x} < 320) & ({1'b0, y} >= 0) & ({1'b0, y} < 240)) & (RESOLUTION == "320x240");
-//	assign writeEn = (plot) & (valid_160x120 | valid_320x240); //Lo comente
 	
 	assign writeEn = (plot); 
 	/* Allow the user to plot a pixel if and only if the (X,Y) coordinates supplied are in a valid range. */
 	
-	/* Create video memory. */
-	altsyncram	VideoMemory (
-				.wren_a (plot), //Esto aqui lo comente para que no escriba en la memoria de momento
-				.wren_b (gnd),
-				.clock0 (clock), // write clock
-				.clock1 (clock25), // read clock
-				.clocken0 (vcc), // write enable clock
-				.clocken1 (vcc), // read enable clock				
-				.address_a (write_coordinate), //Seria el puerto de CPU
-				.address_b (controller_to_video_memory_addr), //Este es el puerto que usa VGA
-				.data_a (colour), // data in
-				.q_b (to_ctrl_colour)	// data out
-				);
-	defparam
-		VideoMemory.WIDTH_A = 8,//((MONOCHROME == "FALSE") ? (BITS_PER_COLOUR_CHANNEL*3) : 1), //Ancho del dato
-		VideoMemory.WIDTH_B = 8, //Ancho del dato 
-		VideoMemory.INTENDED_DEVICE_FAMILY = "Cyclone IV GX",
-		VideoMemory.OPERATION_MODE = "DUAL_PORT", 
-		VideoMemory.WIDTHAD_A = 17, //Este es el ancho de la direccion de lectura
-		VideoMemory.NUMWORDS_A = 76800, //Es el numero de palabras de la memoria
-		VideoMemory.WIDTHAD_B = 17, //Este es ancho de la direccion de escritura
-		VideoMemory.NUMWORDS_B = 76800, //Este es el numero de palabras de memoria
-		VideoMemory.OUTDATA_REG_B = "CLOCK1", 
-		VideoMemory.ADDRESS_REG_B = "CLOCK1",
-		VideoMemory.CLOCK_ENABLE_INPUT_A = "NORMAL",
-		VideoMemory.CLOCK_ENABLE_INPUT_B = "NORMAL",
-		VideoMemory.CLOCK_ENABLE_OUTPUT_B = "NORMAL",
-		VideoMemory.POWER_UP_UNINITIALIZED = "FALSE",
-		VideoMemory.INIT_FILE = BACKGROUND_IMAGE;
-		
+//	/* Create video memory. */
+//	altsyncram	VideoMemory (
+//				.wren_a (gnd), //Esto aqui lo comente para que no escriba en la memoria de momento
+//				.wren_b (gnd),
+//				.clock0 (clock), // write clock
+//				.clock1 (clock25), // read clock
+//				.clocken0 (vcc), // write enable clock
+//				.clocken1 (vcc), // read enable clock				
+//				.address_a (write_coordinate), //Seria el puerto de CPU
+//				.address_b (controller_to_video_memory_addr[16:2]), //Este es el puerto que usa VGA
+//				.data_a (colour), // data in
+//				.q_b (to_ctrl_colour)	// data out
+//				);
+//	defparam
+//		VideoMemory.WIDTH_A = 32,//((MONOCHROME == "FALSE") ? (BITS_PER_COLOUR_CHANNEL*3) : 1), //Ancho del dato
+//		VideoMemory.WIDTH_B = 32, //Ancho del dato 
+//		VideoMemory.INTENDED_DEVICE_FAMILY = "Cyclone IV GX",
+//		VideoMemory.OPERATION_MODE = "DUAL_PORT", 
+//		VideoMemory.WIDTHAD_A = 17, //Este es el ancho de la direccion de lectura
+//		VideoMemory.NUMWORDS_A = 76800, //Es el numero de palabras de la memoria
+//		VideoMemory.WIDTHAD_B = 17, //Este es ancho de la direccion de escritura
+//		VideoMemory.NUMWORDS_B = 76800, //Este es el numero de palabras de memoria
+//		VideoMemory.OUTDATA_REG_B = "CLOCK1", 
+//		VideoMemory.ADDRESS_REG_B = "CLOCK1",
+//		VideoMemory.CLOCK_ENABLE_INPUT_A = "NORMAL",
+//		VideoMemory.CLOCK_ENABLE_INPUT_B = "NORMAL",
+//		VideoMemory.CLOCK_ENABLE_OUTPUT_B = "NORMAL",
+//		VideoMemory.POWER_UP_UNINITIALIZED = "FALSE",
+//		VideoMemory.INIT_FILE = BACKGROUND_IMAGE;
+	
+	
+	
+	wire [7:0] VGA_DATA;
+
+	
+	muxVGA muxdata(.sel(read_address), 
+					.address(read_address[1:0]) , 
+					.data(colourVGA), .vga_data(VGA_DATA));
 	
 	vga_controller controller(
 			.vga_clock(clock25),
 			.resetn(resetn),
-			.pixel_colour(to_ctrl_colour), //Aqui va el color del pixel que se va a pintar en la pantalla
-			.memory_address(controller_to_video_memory_addr), 
+			.pixel_colour(VGA_DATA), //Aqui va el color del pixel que se va a pintar en la pantalla
+			.memory_address(vga_read_address), 
 			.VGA_R(VGA_R_CONTROLLER),
 			.VGA_G(VGA_G_CONTROLLER),
 			.VGA_B(VGA_B_CONTROLLER),

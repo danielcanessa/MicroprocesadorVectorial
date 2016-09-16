@@ -135,7 +135,8 @@ module vga_controller(	vga_clock, resetn, pixel_colour, memory_address,
 	
 	/* Change the (x,y) coordinate into a memory address. */
 	vga_address_translator controller_translator(
-					.x(x), .y(y), .mem_address(memory_address) , .colour(Colour) , .image_on(image_on) );
+					.x(x), .y(y), .mem_address(memory_address) , .colour(Colour) , 
+					.image_on(image_on), .clock25(vga_clock) );
 		defparam controller_translator.RESOLUTION = RESOLUTION;
 
 
@@ -208,35 +209,6 @@ module vga_controller(	vga_clock, resetn, pixel_colour, memory_address,
 		VGA_B[1] <= pixel_colour[1];
 		VGA_B[0] <= pixel_colour[0];
 		
-		
-
-		
-	/* if (MONOCHROME == "FALSE")
-		begin
-			for (index = 9-BITS_PER_COLOUR_CHANNEL; index >= 0; index = index - BITS_PER_COLOUR_CHANNEL)
-			begin
-				for (sub_index = BITS_PER_COLOUR_CHANNEL - 1; sub_index >= 0; sub_index = sub_index - 1)
-				begin
-					VGA_R[sub_index+index] <= pixel_colour[sub_index + BITS_PER_COLOUR_CHANNEL*2 - 1];
-					VGA_G[sub_index+index] <= pixel_colour[sub_index + BITS_PER_COLOUR_CHANNEL - 1];
-					if(sub_index == 1'b0) begin
-						//VGA_B[sub_index+index+1] <= pixel_colour[sub_index-1];
-					end
-					else begin
-						VGA_B[sub_index+index+1] <= pixel_colour[sub_index-1];
-					end
-				end
-			end	
-		end
-		else
-		begin
-			for (index = 0; index < 10; index = index + 1)
-			begin
-				VGA_R[index] <= pixel_colour[0:0];
-				VGA_G[index] <= pixel_colour[0:0];
-				VGA_B[index] <= pixel_colour[0:0];
-			end	
-		end  */
 	end
 
 endmodule
